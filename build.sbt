@@ -1,9 +1,12 @@
 lazy val testSuite = (project in file("."))
-  .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
+  .enablePlugins(SbtAutoBuildPlugin)
+  .disablePlugins(JUnitXmlReportPlugin) // Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(
-    name := "self-assessment-assist-acceptance-tests",
-    version := "0.1.0",
-    scalaVersion := "2.12.12",
-    scalacOptions ++= Seq("-feature"),
-    libraryDependencies ++= Dependencies.test
+      name := "mtd-sa-api-acceptance-tests",
+      version := "0.1.0",
+      scalaVersion := "2.12.15",
+      scalacOptions ++= Seq("-feature", "-Xfatal-warnings"),
+        libraryDependencies ++= Dependencies.test,
+      // The testOptions from SbtAutoBuildPlugin supports only ScalaTest. Resetting testOptions for Cucumber Tests.
+      Test / testOptions := Seq.empty
   )
