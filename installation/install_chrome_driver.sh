@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 #Depending on the OS of your device, change the value of OS appropriately
-#OS="linux64"
-OS="mac64"
+OS="linux64"
+#OS="mac64"
 
 #These match the configuration on Jenkins - you should only have to adjust these values when the platform makes changes
 CHROME_VERSION=`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`

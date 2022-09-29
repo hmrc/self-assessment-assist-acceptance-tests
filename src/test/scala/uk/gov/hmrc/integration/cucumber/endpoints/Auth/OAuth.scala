@@ -21,7 +21,7 @@ object OAuth {
          |  "client_secret": "${thirdPartyApp.clientSecret}",
          |  "grant_type": "authorization_code",
          |  "code": "$oauthCode",
-         |   "redirect_uri": "${thirdPartyApp.redirectUrl}"
+         |  "redirect_uri": "${thirdPartyApp.redirectUrl}"
          |}
       """.stripMargin)
       .toString
@@ -61,7 +61,10 @@ object OAuth {
 
   def grantAuthorityToVendorWithPassword(userId: String, password: String): Unit = {
     navigateTo(oauthAuthorizeUrl)
+    confirmUrl(s"$oauthFrontendUrl/start")
     findElementByCssSelector("[data-module=govuk-button]").click()
+
+    confirmUrl(s"$oauthFrontendUrl/whatYouWillNeed")
     findElementByCssSelector("[data-module=govuk-button]").click()
 
     // Login
@@ -75,7 +78,7 @@ object OAuth {
       findElementById("submit-continue").click()
     }
 
-    //confirmUrl(s"$oauthFrontendUrl/grantscope")
+    confirmUrl(s"$oauthFrontendUrl/grantscope")
     // Check for agent error
     if(driver.getPageSource contains "You cannot access client data at the moment") {
       println("\n\n⚠️ ⚠️ ⚠️  Agents not working: You cannot access client data at the moment  ⚠️ ⚠️ ⚠️\n\n")
@@ -129,34 +132,6 @@ object OAuth {
       s"client_id=${thirdPartyApp.clientId}" +
         s"&client_secret=${thirdPartyApp.clientSecret}" +
         s"&grant_type=client_credentials"
-
-    response =
-      if (env == "qa") getHttpWithTimeout(s"$oauthApiUrl/token").postData(urlEncodedBody).headers(contentTypeUrlEncodedHeader).asString
-      else getHttpWithTimeout(s"$oauthApiUrl/token").postData(jsonBody).headers(contentTypeHeader).asString
-
-    val accessToken: String = "Bearer " + response.body.split("\"access_token\":\"")(1).split("\"")(0)
-
-    accessToken
-  }
-
-  def setupAssistAccessToken: String = {
-
-    val jsonBody: String = Json
-      .parse(s"""
-         |{
-         |  "client_id": "${thirdPartyToken3.clientId1}",
-         |  "client_secret": "${thirdPartyToken3.clientSecret1}",
-         |  "grant_type": "client_credentials",
-         |  "scope": "read:self-assessment-assist write:self-assessment-assist"
-         |}
-      """.stripMargin)
-      .toString
-
-    val urlEncodedBody: String =
-      s"client_id=${thirdPartyApp.clientId}" +
-        s"&client_secret=${thirdPartyApp.clientSecret}" +
-        s"&grant_type=client_credentials" +
-        s"scope=read:self-assessment-assist write:self-assessment-assist"
 
     response =
       if (env == "qa") getHttpWithTimeout(s"$oauthApiUrl/token").postData(urlEncodedBody).headers(contentTypeUrlEncodedHeader).asString
