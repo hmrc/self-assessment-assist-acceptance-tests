@@ -1,0 +1,28 @@
+@DeleteCharitableGiving @IndividualsReliefsApi @All
+
+Feature: Delete Charitable Giving Tax Relief
+
+  Scenario: Setup user
+
+    Given an individual is authorised
+    And I set the API version to 1.0
+
+  Scenario Outline: Successfully delete a Charitable Giving Tax Relief with Gov-Test-Scenario <Gov-Test-Scenario>
+    When a request is made to DELETE to url: CharitableGivingReliefsUrl, and the gov-test-scenario: <Gov-Test-Scenario>
+    Then the response code is <Code>
+    And the response body is <Response>
+    And the X-CorrelationId header is not empty
+
+    Examples:
+      | Gov-Test-Scenario          | Code | Response                    |
+      | DELETE                     | 204  | empty                       |
+
+  Scenario Outline: Unsuccessfully delete a Charitable Giving Tax Relief with Gov-Test-Scenario <Gov-Test-Scenario>
+    When a request is made to DELETE to url: CharitableGivingReliefsUrl, and the gov-test-scenario: <Gov-Test-Scenario>
+    Then the response code is <Code>
+    And the response body is <Response>
+    And the X-CorrelationId header is not empty
+
+    Examples:
+      | Gov-Test-Scenario          | Code | Response                    |
+      | NOT_FOUND                  | 404  | MATCHING_RESOURCE_NOT_FOUND |

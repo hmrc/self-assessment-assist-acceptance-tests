@@ -1,46 +1,84 @@
-**This is a template README.md.  Be sure to update this with project specific content that describes your api test project.**
 
-# self-assessment-assist-acceptance-tests
-API test suite for the `<digital service name>` using ScalaTest and [play-ws](https://github.com/playframework/play-ws) client.  
+# mtd-sa-api-acceptance-tests
 
-## Running the tests
+### This repository is the acceptance test suite for:
+- **business-details-api** 
+- **cis-deductions-api**
+- **individual-calculations-api**
+- **individual-losses-api**
+- **individuals-business-eops-api**
+- **individuals-charges-api**
+- **individuals-disclosures-api**
+- **individuals-expenses-api**
+- **individuals-income-received-api**
+- **individuals-reliefs-api**
+- **individuals-state-benefits-api**
+- **obligations-api**
+- **other-deductions-api**
+- **property-business-api**
+- **self-assessment-accounts-api**
+- **self-assessment-api**
+    - **mtd-charitable-giving**
+    - **mtd-dividends-income**
+    - **mtd-savings-accounts**
+- **self-assessment-biss-api**
+- **self-assessment-bsas-api**
+- **self-employment-business-api**
 
-Prior to executing the tests ensure you have:
- - Installed [MongoDB](https://docs.mongodb.com/manual/installation/) 
- - Installed/configured [service manager](https://github.com/hmrc/service-manager).  
+It is built using:
 
-Run the following commands to start services locally:
+* Cucumber > 6.10.4
+* Java 8
+* Scala 2.12.x
+* sbt 1.5.x
 
-    docker run --rm -d --name mongo -d -p 27017:27017 mongo:4.0
-    sm --start IVHO -r --wait 100
+### Support
+This repository is supported by the Test Community for any information on how to use it, or if you'd like any help please come to #community-testing in Slack.
 
-Using the `--wait 100` argument ensures a health check is run on all the services started as part of the profile. `100` refers to the given number of seconds to wait for services to pass health checks.    
+### Contributions
+If you'd like to contribute, please raise a PR and notify us in #team-mtdapi - one of the core maintainers will take a look and merge the PR.
 
-Then execute the `run_tests.sh` script:
+### Run Acceptance Tests
+Prior to executing the tests, ensure you have the following prerequisites:
 
-`./run_tests.sh <environment>`
+* chromedriver binary installed at /usr/local/bin to run tests locally against Chrome browser
+* installed/configured [service manager](https://github.com/hmrc/service-manager).
 
-The tests default to the `local` environment.  For a complete list of supported param values, see:
- - `src/test/resources/application.conf` for **environment** 
+**Note 1:** *You will need to ensure that you have a recent version of Chrome installed for the later versions of the drivers to work reliably.*
 
-#### Running the tests against a test environment
+**Note 2:** *Ensure mongo is running.*
 
-To run the tests against an environment set the corresponding `host` environment property as specified under
- `<env>.host.services` in the [application.conf](src/test/resources/application.conf). 
+To test the services locally, use the following service manager profile to run the required services:
+    
+    sm --start MTDFB_ALL -f
 
- ### Scalafmt
- This repository uses [Scalafmt](https://scalameta.org/scalafmt/), a code formatter for Scala. The formatting rules configured for this repository are defined within [.scalafmt.conf](.scalafmt.conf).
+Navigate to the appropriate directory:
 
- To apply formatting to this repository using the configured rules in [.scalafmt.conf](.scalafmt.conf) execute:
+    cd scripts/<service>
 
- ```
- sbt scalafmtAll scalafmtSbt
- ```
+Then execute the `test_local.sh` shell script:
 
- To check files have been formatted as expected execute:
+    ./test_local.sh
 
- ```
- sbt scalafmtCheckAll scalafmtSbtCheck
- ```
+**Note 3:** *If you are testing changes to the services locally, then you may not need to start the services via service manager. Or, stop the services using sm --stop if necessary.*
 
-[Visit the official Scalafmt documentation to view a complete list of tasks which can be run.](https://scalameta.org/scalafmt/docs/installation.html#task-keys)
+### Run Smoke Tests
+The smoke tests go through the API Platform.
+
+Ensure the required services are running and then navigate to the appropriate directory:
+
+    cd scripts/<service>
+
+Then execute the shell scripts for your environment of choice:
+
+    ./smoke_local.sh
+    ./smoke_staging.sh
+    ./smoke_externaltest.sh
+
+### Generate tax payer access tokens for each environment
+
+    ./generateTestUsers_local.sh
+    ./generateTestUsers_development.sh
+    ./generateTestUsers_qa.sh
+    ./generateTestUsers_staging.sh
+    ./generateTestUsers_externaltest.sh

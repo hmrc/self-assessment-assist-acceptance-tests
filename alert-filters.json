@@ -1,0 +1,18 @@
+{
+  "add": [
+    {
+      "reason": "Application Error Disclosure || returned for tests that expect a 500 response",
+      "url": "http:\/\/localhost:9666\/.*",
+      "urlIsRegex": "true",
+      "ruleId": 90022,
+      "newLevel": 0
+    },
+    {
+      "reason": "Information Disclosure - Debug Error Messages || returned for tests that expect a 500 response",
+      "url": "http:\/\/localhost:9666\/.*",
+      "urlIsRegex": "true",
+      "ruleId": 10023,
+      "newLevel": 0
+    }
+  ]
+}
