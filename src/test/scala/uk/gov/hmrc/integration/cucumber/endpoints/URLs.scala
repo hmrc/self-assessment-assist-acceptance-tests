@@ -18,6 +18,7 @@ object URLs {
 
   def retrieveRequestUrl(url: String): String = {
 
+    val saAssistBaseUrl: String                              = s"$saAssistApiUrl/${taxPayer.nino}/111190b4-06e3-4fef-a555-6fd0877dc7ca"
     val saApiBaseUrl: String                                 = s"$saApiUrl/${taxPayer.nino}"
     val lossesApiBaseUrl: String                             = s"$individualLossesApiUrl/${taxPayer.nino}"
     val calcApiBaseUrl: String                               = s"$individualCalculationApiUrl/${taxPayer.nino}"
@@ -302,6 +303,10 @@ object URLs {
       case "RetrieveSelfAssessmentTaxCalculationUrl" => s"$calcApiBaseUrl/self-assessment/2020-21/$randomCalcId"
 
       // ░▒▓▓▓ Self Assessment API ▓▓▓▒░
+
+      // Self Assessment Assist API
+      case "SaAssistGenerate" => s"$saAssistBaseUrl"
+
       // Self Assessment Legacy
       // Self-Employments
       case "SeAddBusiness"                 => s"$saApiBaseUrl/self-employments"
@@ -321,6 +326,7 @@ object URLs {
       case "SePeriodOne2nd"               => s"$saApiBaseUrl/self-employments/$selfEmploymentId2nd/periods/2017-04-06_2017-07-05"
       case "SeAnnualSummary2nd"           => s"$saApiBaseUrl/self-employments/$selfEmploymentId2nd/2017-18"
       case "SeRetrieveEopsObligations2nd" => s"$saApiBaseUrl/self-employments/$selfEmploymentId2nd/end-of-period-statements/obligations"
+
 
       // UK Property
       case "UkpAddBusiness"                 => s"$saApiBaseUrl/uk-properties"
