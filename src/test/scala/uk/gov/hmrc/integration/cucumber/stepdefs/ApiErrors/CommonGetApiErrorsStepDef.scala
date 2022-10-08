@@ -3,6 +3,11 @@
  *
  */
 
+/*
+ * Copyright 2022 HM Revenue & Customs
+ *
+ */
+
 package uk.gov.hmrc.integration.cucumber.stepdefs.ApiErrors
 
 import uk.gov.hmrc.integration.cucumber.endpoints.BasePage._

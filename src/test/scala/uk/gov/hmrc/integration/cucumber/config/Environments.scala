@@ -6,13 +6,14 @@
 package uk.gov.hmrc.integration.cucumber.config
 
 import com.typesafe.config.ConfigFactory
-import uk.gov.hmrc.integration.cucumber.endpoints.BasePage.removeWhiteSpace
+//import uk.gov.hmrc.integration.cucumber.endpoints.BasePage.removeWhiteSpace
 
 trait Environments {
 
   private val config = ConfigFactory.load("environments.conf")
   val env: String    = Option(System.getProperty("env")).getOrElse("local")
 
+  val saAssistApiUrl: String                  = config.getString(s"environments.$env.self-assessment-assist-api")
   val saApiUrl: String                        = config.getString(s"environments.$env.self-assessment-api")
   val individualLossesApiUrl: String          = config.getString(s"environments.$env.individual-losses-api")
   val individualCalculationApiUrl: String     = config.getString(s"environments.$env.individual-calculations-api")
@@ -33,7 +34,7 @@ trait Environments {
   val selfEmploymentBusinessApiUrl: String    = config.getString(s"environments.$env.self-employment-business-api")
   val cisDeductionsApiUrl: String             = config.getString(s"environments.$env.cis-deductions-api")
 
-  val apiPlatformTestUserUrl: String = config.getString(s"environments.$env.api-platform-test-user")
+    val apiPlatformTestUserUrl: String = config.getString(s"environments.$env.api-platform-test-user")
 
   val apiPlatformAgentsAuthUrl: String     = config.getString(s"environments.$env.api-platform-agents-auth")
   val apiPlatformAgentsAuthTestUrl: String = config.getString(s"environments.$env.api-platform-agents-auth-test")
@@ -47,20 +48,18 @@ trait Environments {
     val clientId: String     = config.getString(s"environments.$env.third-party-application.client-id")
     val clientSecret: String = config.getString(s"environments.$env.third-party-application.client-secret")
   }
+  object thirdPartyToken3 {
+    //val redirectUrl: String  = config.getString(s"environments.$env.third-party-token.redirect-url")
+    val clientId1: String     = config.getString(s"environments.$env.third-party-token.client-id")
+    val clientSecret1: String = config.getString(s"environments.$env.third-party-token.client-secret")
+  }
 
   val oauthFrontendUrl: String    = config.getString(s"environments.$env.oauth-frontend")
   val oauthApiUrl: String         = config.getString(s"environments.$env.oauth-api")
   val oauthApiExtendedUrl: String = config.getString(s"environments.$env.oauth-api-extended")
 
   val oauthAuthorizeUrl: String =
-    removeWhiteSpace(s"""
-       | $oauthApiExtendedUrl
-       | /authorize
-       | ?client_id=${thirdPartyApp.clientId}
-       | &scope=read:self-assessment+write:self-assessment+write:sent-invitations
-       | &response_type=code
-       | &redirect_uri=${thirdPartyApp.redirectUrl}
-       | &state=12345
-     """.stripMargin)
+    s"${oauthApiExtendedUrl}/authorize?client_id=${thirdPartyApp.clientId}&scope=read:self-assessment-assist write:self-assessment-assist&response_type=code&redirect_uri=${thirdPartyApp.redirectUrl}"
+
 
 }

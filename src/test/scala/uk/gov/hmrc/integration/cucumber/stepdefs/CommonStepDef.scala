@@ -18,6 +18,28 @@ import scala.util.Try
 
 class CommonStepDef extends BaseStepDef with JsonTools {
 
+  When("""^generate report POSt call url: (.*), invoked with valid nino with request body: (.*)$""") {
+    (url: String, scenario:String) =>
+
+      if (scenario != "None")response = requestEmptyPOST(url, requestHeaders,Some(scenario))
+      else response = requestEmptyPOST(url, requestHeaders, None)
+  }
+
+//
+//      When("""^a request is made to POST to url: (.*), with the JSON body: (.*), and the gov-test-scenario: (.*)$"""){
+//        (url: String, jsonBody: String, scenario: String) =>
+//
+//          if (scenario != "None") response = requestPOST(url, jsonBody, requestHeaders, Some(scenario))
+//          else response = requestPOST(url, jsonBody, requestHeaders, None)
+//      }
+
+
+
+
+
+
+
+
   Then("""^close the browser$""") { () =>
     Try(SingletonDriver.closeInstance)
   }

@@ -5,12 +5,13 @@
 
 package uk.gov.hmrc.integration.cucumber.endpoints.Auth
 
+import org.openqa.selenium.By
 import play.api.libs.json.Json
 import uk.gov.hmrc.integration.cucumber.endpoints.Auth.AgentAuthorisation._
 import uk.gov.hmrc.integration.cucumber.endpoints.Auth.AuthLoginApi._
-import uk.gov.hmrc.integration.cucumber.endpoints.BasePage._
-import uk.gov.hmrc.integration.cucumber.endpoints.Auth.OAuth._
 import uk.gov.hmrc.integration.cucumber.endpoints.Auth.CreateTestUser._
+import uk.gov.hmrc.integration.cucumber.endpoints.Auth.OAuth._
+import uk.gov.hmrc.integration.cucumber.endpoints.BasePage._
 import uk.gov.hmrc.integration.cucumber.utils.json.JsonTools
 
 object TestUserCreation extends JsonTools {
@@ -73,7 +74,8 @@ object TestUserCreation extends JsonTools {
     else grantAuthorityToVendorWithLoginStub(affinityGroup, nino, mtditid)
 
     // Grab oauth code from url
-    val oauthCode: String = driver.getCurrentUrl.split("code=")(1).split("&")(0)
+    //val oauthCode: String = driver.getCurrentUrl.split("code=")(1).split("&")(0)
+   val oauthCode: String = driver.findElement(By.cssSelector("#authorisation-code")).getText
 
     // Request access token
     val accessToken: String = requestAccessToken(oauthCode)
