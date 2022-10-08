@@ -84,7 +84,7 @@ trait BasePage extends Matchers with ScalaDsl with Environments with BaseStepDef
   val contentTypeUrlEncodedHeader: Map[String, String] = Map("Content-Type" -> "application/x-www-form-urlencoded")
 
   def requestHeaders: Map[String, String] = Map(
-    "Accept"        -> s"application/vnd.hmrc.$apiVersion+json",
+   // "Accept"        -> s"application/vnd.hmrc.$apiVersion+json",
     "Authorization" -> s"${taxPayer.accessToken}",
     "Content-Type"  -> "application/json"
   )
@@ -275,6 +275,7 @@ trait BasePage extends Matchers with ScalaDsl with Environments with BaseStepDef
       getHttpWithTimeout(postUrl).method("POST").headers(commonHeaders ++ govTestScenarioHeader).postData("").copy(proxyConfig = proxy).asString
 
     if (printConfig) printRequestAndResponseLog()
+//    printRequestAndResponseLog()
 
     response
   }
