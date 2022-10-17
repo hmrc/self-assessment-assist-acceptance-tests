@@ -25,6 +25,28 @@ class CommonStepDef extends BaseStepDef with JsonTools {
       else response = requestEmptyPOST(url, requestHeaders, None)
   }
 
+  When("""^acknowledge report POSt call url: (.*), invoked with valid nino with request body: (.*)$""") {
+    (url: String, scenario: String) =>
+
+      if (scenario != "None") response = requestEmptyPOST(url, requestHeaders, Some(scenario))
+      else response = requestEmptyPOST(url, requestHeaders, None)
+  }
+
+  When("""^generate report POSt call url: (.*), invoked with invalid calculationID with request body: (.*)$""") {
+    (url: String, scenario: String) =>
+
+      if (scenario != "None") response = requestEmptyPOST(url, requestHeaders, Some(scenario))
+      else response = requestEmptyPOST(url, requestHeaders, None)
+  }
+
+  When("""^acknowledge report POSt call url: (.*), invoked with invalid reportID with request body: (.*)$""") {
+    (url: String, scenario: String) =>
+
+      if (scenario != "None") response = requestEmptyPOST(url, requestHeaders, Some(scenario))
+      else response = requestEmptyPOST(url, requestHeaders, None)
+  }
+
+
 //
 //      When("""^a request is made to POST to url: (.*), with the JSON body: (.*), and the gov-test-scenario: (.*)$"""){
 //        (url: String, jsonBody: String, scenario: String) =>
