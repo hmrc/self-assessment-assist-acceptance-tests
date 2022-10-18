@@ -31,6 +31,7 @@ Feature: Test auth for self-employment-business-api on a single endpoint
     And the response body is CLIENT_OR_AGENT_NOT_AUTHORISED
 
   Scenario: Invalid nino
+
     Given an individual uses wrong nino
     When a request is made to PUT to url: SelfEmploymentBusinessAnnualSubmissionUrl, with the JSON body: CREATE_OR_AMEND_ANNUAL_SUBMISSION, and the gov-test-scenario: None
     Then the response code is 403

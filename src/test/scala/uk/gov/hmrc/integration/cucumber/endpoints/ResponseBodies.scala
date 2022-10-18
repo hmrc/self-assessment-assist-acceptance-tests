@@ -27,8 +27,8 @@ import uk.gov.hmrc.integration.cucumber.json.SaAccountsApi._
 import uk.gov.hmrc.integration.cucumber.json.SaBissApi.RetrieveBissJson
 import uk.gov.hmrc.integration.cucumber.json.SaBsasApi.V2._
 import uk.gov.hmrc.integration.cucumber.json.SaBsasApi.V3._
-import uk.gov.hmrc.integration.cucumber.json.SelfAssessmentApiLegacy.SelfEmployment.SeAnnualSummariesJson
-import uk.gov.hmrc.integration.cucumber.json.SelfAssessmentApiLegacy._
+import uk.gov.hmrc.integration.cucumber.json.SelfAssessmentAssistAPI.SelfEmployment.SeAnnualSummariesJson
+import uk.gov.hmrc.integration.cucumber.json.SelfAssessmentAssistAPI._
 import uk.gov.hmrc.integration.cucumber.json.SelfEmploymentBusinessApi.AnnualSubmission._
 import uk.gov.hmrc.integration.cucumber.json.SelfEmploymentBusinessApi.PeriodSummary.{AmendSEPeriodSummaryJson, CreateSEPeriodSummaryJson}
 import uk.gov.hmrc.integration.cucumber.json._
