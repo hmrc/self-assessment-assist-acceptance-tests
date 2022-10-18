@@ -66,6 +66,7 @@ class CommonStepDef extends BaseStepDef with JsonTools {
     Try(SingletonDriver.closeInstance)
   }
 
+
   Then("""^I set the API version to (.*)$""") { version: String =>
     apiVersion = version
   }

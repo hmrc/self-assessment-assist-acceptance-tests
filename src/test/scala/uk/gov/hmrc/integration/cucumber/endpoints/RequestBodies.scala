@@ -28,9 +28,9 @@ import uk.gov.hmrc.integration.cucumber.json.SaAccountsApi.CreateAmendCodingOutJ
 import uk.gov.hmrc.integration.cucumber.json.SaBsasApi.V2.{SubmitBsasJson, V2TriggerBsasJson}
 import uk.gov.hmrc.integration.cucumber.json.SaBsasApi.V3.{V3SubmitBsasJson, V3TriggerBsasJson}
 import uk.gov.hmrc.integration.cucumber.json.SampleEndpointJson
-import uk.gov.hmrc.integration.cucumber.json.SelfAssessmentApiLegacy.SelfEmployment._
-import uk.gov.hmrc.integration.cucumber.json.SelfAssessmentApiLegacy.TaxCalculations._
-import uk.gov.hmrc.integration.cucumber.json.SelfAssessmentApiLegacy.UkProperty._
+import uk.gov.hmrc.integration.cucumber.json.SelfAssessmentAssistAPI.SelfEmployment._
+import uk.gov.hmrc.integration.cucumber.json.SelfAssessmentAssistAPI.TaxCalculations._
+import uk.gov.hmrc.integration.cucumber.json.SelfAssessmentAssistAPI.UkProperty._
 import uk.gov.hmrc.integration.cucumber.json.SelfEmploymentBusinessApi.AnnualSubmission.AmendSEAnnualSubmissionJson
 import uk.gov.hmrc.integration.cucumber.json.SelfEmploymentBusinessApi.PeriodSummary.{AmendSEPeriodSummaryJson, CreateSEPeriodSummaryJson}
 
