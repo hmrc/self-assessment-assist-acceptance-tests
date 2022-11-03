@@ -17,6 +17,6 @@ object Driver extends LazyLogging {
   )
 
   val options = new ChromeOptions()
-  options.setHeadless(true) // Set value to false if the browser type 'chrome' is used in script files to view UI
+  options.setHeadless(false) // Set value to false if the browser type 'chrome' is used in script files to view UI
   lazy val instance: WebDriver = SingletonDriver.getInstance(Some(options))
 }
