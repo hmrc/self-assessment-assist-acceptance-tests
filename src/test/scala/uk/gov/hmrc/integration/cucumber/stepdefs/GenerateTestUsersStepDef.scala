@@ -8,7 +8,9 @@ package uk.gov.hmrc.integration.cucumber.stepdefs
 import uk.gov.hmrc.integration.cucumber.endpoints.Auth.TestUserCreation._
 import uk.gov.hmrc.integration.cucumber.endpoints.BasePage._
 
-class GenerateTestUsersStepDef extends BaseStepDef {
+
+
+class GenerateTestUsersStepDef extends BaseStepDef  {
 
   Then("""^generate tax payers for given environment$""") { () =>
     env match {
