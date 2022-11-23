@@ -85,4 +85,8 @@ class AuthStepDef extends BaseStepDef {
     printTaxPayer()
   }
 
+  Given ("""^I login through the Auth login page using nino (.*)$"""){ (nino: String) =>
+    taxPayer = createLocalAgentNotAuthorisedForClient
+  }
+
 }

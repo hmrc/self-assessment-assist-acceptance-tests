@@ -5,12 +5,15 @@
 
 package uk.gov.hmrc.integration.cucumber.stepdefs
 
+import org.junit.Assert
+import uk.gov.hmrc.integration.cucumber.endpoints.Auth.AuthLoginStub
 import uk.gov.hmrc.integration.cucumber.endpoints.Auth.TestUserCreation._
 import uk.gov.hmrc.integration.cucumber.endpoints.BasePage._
+import uk.gov.hmrc.integration.cucumber.utils.data.TestData
 
 
 
-class GenerateTestUsersStepDef extends BaseStepDef  {
+class GenerateTestUsersStepDef extends BaseStepDef with TestData {
 
   Then("""^generate tax payers for given environment$""") { () =>
     env match {
@@ -24,10 +27,14 @@ class GenerateTestUsersStepDef extends BaseStepDef  {
         print(AffinityGroup.Individual)
         taxPayer = createAgentUserAuthorisedOnApiPlatform
         print(AffinityGroup.Agent)
-      case _ =>
+      case "development" =>
         taxPayer = createUserAuthorisedOnApiPlatform(AffinityGroup.Individual)
         print(AffinityGroup.Individual)
     }
+  }
+  Given("""^generate tax payers with invalid nino$""") { () =>
+    taxPayer = createSATestUserWithInvalidNino(AffinityGroup.Individual)
+    printTaxPayer()
   }
 
   Then("""^generate an access token for (.*) with nino (.*) and mtditid (.*)$""") { (affinityGroup: String, nino: String, mtditid: String) =>
@@ -51,6 +58,18 @@ class GenerateTestUsersStepDef extends BaseStepDef  {
     taxPayer = generateAccessTokenOnApiPlatform("Individual", nino, mtditid)
     print("Individual", desc)
   }
+
+  Given("""^I login through the Auth login page using (.*)$""") { (userType: String) =>
+    val user = getUser(userType)
+    AuthLoginStub.loginAgentUsingAuthLoginStubNEW(user)
+  }
+
+  Then("""^I can see the auth token page header : (.*)$""") { (expectedPageHeader: String) =>
+   val actualPageHeader = findElementByTagName("h1").getText
+    Assert.assertEquals(actualPageHeader, expectedPageHeader)
+  }
+
+
 
   def print(affinityGroup: String, desc: String = "none"): Unit = {
     val client: String = if (affinityGroup == AffinityGroup.Agent) "client " else ""

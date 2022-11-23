@@ -19,6 +19,7 @@ object URLs {
   def retrieveRequestUrl(url: String): String = {
 
     val saAssistBaseUrl: String                              = s"$saAssistApiUrl/${taxPayer.nino}/111190b4-06e3-4fef-a555-6fd0877dc7ca"
+    val saAssistBaseUrlWithInvalidNino: String               = s"$saAssistApiUrl/GB123456H/111190b4-06e3-4fef-a555-6fd0877dc7ca"
     val saAssistGenerateInvalidCalc: String                  = s"$saAssistGenerateApiInvalidCalc/${taxPayer.nino}/111190b4-06e3-4fef-a555"
     val saAssistAcknowledgeUrl: String                       = s"$saAssistAcknowledgeApiUrl/${taxPayer.nino}/a365c0b4-06e3-4fef-a555-16fd0877dc7c/a5fht738957jfjf845jgjf855"
     val saAssistAcknowledgeInvalidReportID: String           = s"$saAssistAcknowledgeInvalidReportIDApiUrl/${taxPayer.nino}/a365c0b4-06e3-4fef-a555/a5fht738957jfjf845jgjf855"
@@ -312,6 +313,7 @@ object URLs {
       case "SaAssistAcknowledge" => s"$saAssistAcknowledgeUrl"
       case "SaAssistGenerateInvalidCalc" => s"$saAssistGenerateInvalidCalc"
       case "SaAssistAcknowledgeInvalidReportID" => s"$saAssistAcknowledgeInvalidReportID"
+      case "SaAssistGenerateInvalidNino" => s"$saAssistBaseUrlWithInvalidNino"
 
 
 

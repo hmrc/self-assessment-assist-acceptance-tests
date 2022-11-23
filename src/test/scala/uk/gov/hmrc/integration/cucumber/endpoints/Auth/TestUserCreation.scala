@@ -25,7 +25,13 @@ object TestUserCreation extends JsonTools {
 
   def createLocalTestUserWithInvalidNino(affinityGroup: String): TaxPayer = {
     val newTaxPayer = createLocalTestUserWithAuthLoginApi(affinityGroup)
-    if (affinityGroup != AffinityGroup.Agent) TaxPayer(randomNino, newTaxPayer.mtditid, newTaxPayer.accessToken, None)
+    if (affinityGroup != AffinityGroup.Agent) TaxPayer(invalidNino, newTaxPayer.mtditid, newTaxPayer.accessToken, None)
+    else TaxPayer(randomNino, newTaxPayer.mtditid, newTaxPayer.accessToken, newTaxPayer.agentReferenceNumber)
+  }
+
+  def createSATestUserWithInvalidNino(affinityGroup: String): TaxPayer = {
+    val newTaxPayer = createUserAuthorisedOnApiPlatform(affinityGroup)
+    if (affinityGroup != AffinityGroup.Agent) TaxPayer(invalidNino, newTaxPayer.mtditid, newTaxPayer.accessToken, None)
     else TaxPayer(randomNino, newTaxPayer.mtditid, newTaxPayer.accessToken, newTaxPayer.agentReferenceNumber)
   }
 
@@ -67,6 +73,10 @@ object TestUserCreation extends JsonTools {
     val password: String     = retrieveJsonValue(clientCreateTestUser, "password")
     val nino: String         = retrieveJsonValue(clientCreateTestUser, "nino")
     val mtditid: String      = retrieveJsonValue(clientCreateTestUser, "mtdItId")
+    val userFullName: String      = retrieveJsonValue(clientCreateTestUser, "userFullName")
+    print("userId = " + userId)
+    print("\npassword = " + password)
+    print ("\nuserFullName = " + userFullName)
 
     // Grant authority to vendor
     if (env == "development") grantAuthorityToVendorWithPassword(userId, password)
@@ -81,6 +91,10 @@ object TestUserCreation extends JsonTools {
     val accessToken: String = requestAccessToken(oauthCode)
 
     TaxPayer(nino, mtditid, accessToken, None)
+  }
+
+  def loginToAuthLogin (nino: String): Unit = {
+    navigateTo(authLoginStubUrl)
   }
 
   def createAgentUserAuthorisedOnApiPlatform: TaxPayer = {
