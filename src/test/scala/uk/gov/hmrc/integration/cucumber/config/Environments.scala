@@ -11,7 +11,7 @@ import com.typesafe.config.ConfigFactory
 trait Environments {
 
   private val config = ConfigFactory.load("environments.conf")
-  val env: String    = Option(System.getProperty("env")).getOrElse("local")
+  val env: String    = Option(System.getProperty("env")).getOrElse("development")
 
   val saAssistApiUrl: String                           = config.getString(s"environments.$env.self-assessment-assist-api")
   val saAssistAcknowledgeApiUrl: String                = config.getString(s"environments.$env.self-assessment-assist-Acknowledge-api")
@@ -62,7 +62,7 @@ trait Environments {
   val oauthApiUrl: String         = config.getString(s"environments.$env.oauth-api")
   val oauthApiExtendedUrl: String = config.getString(s"environments.$env.oauth-api-extended")
 
-  val oauthAuthorizeUrl: String =
+  val oauthAuthorizeUrl: String = //"https://www.development.tax.service.gov.uk/oauth/authorize?client_id=iQDo7HowRCnXauDjis1dcmdfS8m4&redirect_uri=urn:ietf:wg:oauth:2.0:oob&scope=read:self-assessment-assist write:self-assessment-assist&response_type=code"
     s"${oauthApiExtendedUrl}/authorize?client_id=${thirdPartyApp.clientId}&scope=read:self-assessment-assist write:self-assessment-assist&response_type=code&redirect_uri=${thirdPartyApp.redirectUrl}"
 
 }

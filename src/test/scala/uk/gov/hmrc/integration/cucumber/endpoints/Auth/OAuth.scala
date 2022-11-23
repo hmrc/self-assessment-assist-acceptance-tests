@@ -61,11 +61,7 @@ object OAuth {
 
   def grantAuthorityToVendorWithPassword(userId: String, password: String): Unit = {
     navigateTo(oauthAuthorizeUrl)
-  //confirmUrl(s"$oauthFrontendUrl/start")
     findElementByCssSelector("[data-module=govuk-button]").click()
-   // findElementByCssSelector("[Continue]").click()
-
-   // confirmUrl(s"$oauthFrontendUrl/whatYouWillNeed")
     findElementByCssSelector("[data-module=govuk-button]").click()
 
     // Login
