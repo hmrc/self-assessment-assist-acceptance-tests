@@ -40,6 +40,8 @@ trait BasePage extends Matchers with ScalaDsl with Environments with BaseStepDef
 
   def findElementByName(name: String): WebElement = driver.findElement(By.name(name))
 
+  def findElementByTagName(name: String): WebElement = driver.findElement(By.tagName(name))
+
   def findElementByCssSelector(css: String): WebElement = driver.findElement(By.cssSelector(css))
 
   def confirmUrl(url: String): Unit = {
@@ -84,9 +86,10 @@ trait BasePage extends Matchers with ScalaDsl with Environments with BaseStepDef
   val contentTypeUrlEncodedHeader: Map[String, String] = Map("Content-Type" -> "application/x-www-form-urlencoded")
 
   def requestHeaders: Map[String, String] = Map(
-   // "Accept"        -> s"application/vnd.hmrc.$apiVersion+json",
+    // "Accept"        -> s"application/vnd.hmrc.$apiVersion+json",
     "Authorization" -> s"${taxPayer.accessToken}",
-    "Content-Type"  -> "application/json"
+    "Content-Type"  -> "application/json",
+    "Accept"  -> "application/vnd.hmrc.1.0+json"
   )
 
   object AffinityGroup extends Enumeration {
@@ -106,6 +109,8 @@ trait BasePage extends Matchers with ScalaDsl with Environments with BaseStepDef
 
   def randomNino: String = nextNino.value
 
+  def invalidNino: String = "GB123456D"
+
   private def nextNino = {
     val prefix = Random.shuffle(Nino.validPrefixes).head
     val suffix = Random.shuffle(Nino.validSuffixes).head
@@ -113,6 +118,7 @@ trait BasePage extends Matchers with ScalaDsl with Environments with BaseStepDef
 
     Nino(s"$prefix$digits$suffix")
   }
+
 
   lazy val randomBusinessId: String = {
     val initialChar = "X"
@@ -275,7 +281,7 @@ trait BasePage extends Matchers with ScalaDsl with Environments with BaseStepDef
       getHttpWithTimeout(postUrl).method("POST").headers(commonHeaders ++ govTestScenarioHeader).postData("").copy(proxyConfig = proxy).asString
 
     if (printConfig) printRequestAndResponseLog()
-//    printRequestAndResponseLog()
+    printRequestAndResponseLog()
 
     response
   }

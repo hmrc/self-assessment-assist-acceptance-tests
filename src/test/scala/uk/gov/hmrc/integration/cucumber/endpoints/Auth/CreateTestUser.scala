@@ -19,10 +19,15 @@ object CreateTestUser {
 
     val body: String =
       if (affinityGroup.equals(AffinityGroup.Agent)) Json.parse("""{"serviceNames":["agent-services"]}""").toString
-      else Json.parse("""{"serviceNames":["national-insurance", "self-assessment", "mtd-income-tax"],"eoriNumber": "GB123456789012"}""".stripMargin).toString
+      else
+        Json
+          .parse("""{"serviceNames":["national-insurance", 
+              |"self-assessment", "mtd-income-tax"],
+              |"eoriNumber": "GB1234567891144"}""".stripMargin)
+          .toString
 
     val headers: Map[String, String] = Map(
-      "Accept"        -> "application/vnd.hmrc.1.0+json",
+      //     "Accept"        -> "application/vnd.hmrc.1.0+json",
       "Authorization" -> accessToken,
       "Content-Type"  -> "application/json"
     )

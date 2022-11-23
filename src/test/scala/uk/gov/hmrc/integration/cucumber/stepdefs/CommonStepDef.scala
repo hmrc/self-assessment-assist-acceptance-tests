@@ -25,6 +25,12 @@ class CommonStepDef extends BaseStepDef with JsonTools {
       else response = requestEmptyPOST(url, requestHeaders, None)
   }
 
+  When("""^generate report POSt call url: (.*), invoked with invalid nino with request body: (.*)$""") {
+    (url: String, scenario:String) =>
+      if (scenario != "None") response = requestEmptyPOST(url, requestHeaders, Some(scenario))
+      else response = requestEmptyPOST(url, requestHeaders, None)
+  }
+
   When("""^acknowledge report POSt call url: (.*), invoked with valid nino with request body: (.*)$""") {
     (url: String, scenario: String) =>
 
@@ -37,6 +43,12 @@ class CommonStepDef extends BaseStepDef with JsonTools {
 
       if (scenario != "None") response = requestEmptyPOST(url, requestHeaders, Some(scenario))
       else response = requestEmptyPOST(url, requestHeaders, None)
+  }
+
+
+  When("""^a request is made to GET to url: (.*), invoked with invalid nino with request body: (.*)$""") { (url: String, scenario: String) =>
+    if (scenario != "None") response = requestGET(url, requestHeaders, Some(scenario))
+    else response = requestGET(url, requestHeaders, None)
   }
 
   When("""^acknowledge report POSt call url: (.*), invoked with invalid reportID with request body: (.*)$""") {

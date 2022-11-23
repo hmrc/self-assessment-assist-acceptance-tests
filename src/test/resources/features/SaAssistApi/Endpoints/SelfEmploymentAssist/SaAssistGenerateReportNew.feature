@@ -1,8 +1,8 @@
 @api-tests
-Feature: E2E Journey of RAS (Happy path) API version 1
+Feature: Generate auth token from dev
+@MADHU1
+  Scenario: Generate auth token from the web
+    Given I login through the Auth login page using nino
+    Then I can see the auth token page header : Authority Wizard Session
 
-  Background:
-    Given I login through the Auth login page and generate a token
-      | enrolmentKey | identifierName |
-      | HMRC-PSA-ORG | PSAID          |
 

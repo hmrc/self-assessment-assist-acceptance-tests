@@ -16,7 +16,12 @@ object Driver extends LazyLogging {
     s"Instantiating Browser: ${sys.props.getOrElse("browser", "'browser' System property not set. This is required")}"
   )
 
+  if (!Option(System.getProperty("browser")).exists(_.nonEmpty)) {
+    System.setProperty("browser", "chrome")
+  }
+
   val options = new ChromeOptions()
   options.setHeadless(false) // Set value to false if the browser type 'chrome' is used in script files to view UI
   lazy val instance: WebDriver = SingletonDriver.getInstance(Some(options))
 }
+
