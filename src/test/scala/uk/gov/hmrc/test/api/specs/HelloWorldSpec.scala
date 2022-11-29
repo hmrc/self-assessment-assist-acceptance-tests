@@ -18,7 +18,7 @@ package uk.gov.hmrc.test.api.specs
 
 class HelloWorldSpec extends BaseSpec {
 
-  Feature("Using the Hello World endpoint") {
+  /*Feature("Using the Hello World endpoint") {
     Scenario("When expecting success") {
       When("I call this endpoint")
 
@@ -31,6 +31,6 @@ class HelloWorldSpec extends BaseSpec {
 
     }
 
-  }
+  }*/
 
 }
