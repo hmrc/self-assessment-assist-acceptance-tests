@@ -27,6 +27,7 @@ class HelloWorldSpec extends BaseSpec {
       Then("it should response with a 200 and the expected response body")
 
       response.status shouldBe 200
+      response.body   shouldBe "hola mundo!"
 
     }
 
