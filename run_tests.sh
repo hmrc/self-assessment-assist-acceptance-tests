@@ -3,13 +3,14 @@
 BROWSER=${1:-remote-chrome}
 JOURNEY=${2:-SelfAssessmentAssist- LOCAL TESTING}
 
-RUNNER="SelfAssessmentTestRunner"
+RUNNER="uk.gov.hmrc.integration.cucumber.utils.runners.SaAssistApi.SelfAssessmentAssistAPI.SelfAssessmentTestRunner"
 
 echo "Running browser tests..."
 echo "=========================================="
 echo "Browser:              ${BROWSER}"
+echo "Env:                  local"
 echo "Journey:              ${JOURNEY}"
 echo "=========================================="
-sbt -Dbrowser=${BROWSER} "testOnly uk.gov.hmrc.integration.cucumber.utils.runners.SaAssistApi.SelfAssessmentAssistAPI.SelfAssessmentTestRunner"
+sbt -Dbrowser=${BROWSER} -Denvironment=local "testOnly ${RUNNER}"
 
 

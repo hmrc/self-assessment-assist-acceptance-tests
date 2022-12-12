@@ -15,9 +15,7 @@ import org.junit.runner.RunWith
   glue = Array("uk.gov.hmrc.integration.cucumber.stepdefs"),
   plugin = Array("pretty",
     "html:target/cucumber",
-    "json:target/cucumber.json",
-    "html:target/test-reports/html-report",
-    "junit:target/test-reports/TEST-cucumber-junit-report.xml"),
+    "json:target/cucumber.json"),
   tags = "@local"
 )
 class SelfAssessmentTestRunner
