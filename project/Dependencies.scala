@@ -4,7 +4,7 @@ object Dependencies {
 
   val test: Seq[ModuleID] = Seq(
     "com.typesafe"         %  "config"            % "1.4.2",
-    "uk.gov.hmrc"          %% "webdriver-factory" % "0.23.0",
+    "uk.gov.hmrc"          %% "webdriver-factory" % "0.38.0",
     "com.typesafe.play"    %% "play-json"         % "2.9.2",
     "org.scalatest"        %% "scalatest"         % "3.2.11",
     "io.cucumber"          %% "cucumber-scala"    % "8.2.2",
