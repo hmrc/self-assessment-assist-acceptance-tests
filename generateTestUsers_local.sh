@@ -11,7 +11,7 @@ elif [ "$BROWSER" = "firefox" ]; then
     DRIVER="-Dwebdriver.gecko.driver=/usr/local/bin/geckodriver"
 fi
 
-RUNNER="TestRunnerNEW"
+RUNNER="SelfAssessmentTestRunner"
 
 echo "Running browser tests..."
 echo "=========================================="

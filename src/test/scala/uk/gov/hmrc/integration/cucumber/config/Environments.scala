@@ -11,7 +11,7 @@ import com.typesafe.config.ConfigFactory
 trait Environments {
 
   private val config = ConfigFactory.load("environments.conf")
-  val env: String    = Option(System.getProperty("env")).getOrElse("development")
+  val env: String    = Option(System.getProperty("env")).getOrElse("local")
 
   val saAssistApiUrl: String                           = config.getString(s"environments.$env.self-assessment-assist-api")
   val saAssistAcknowledgeApiUrl: String                = config.getString(s"environments.$env.self-assessment-assist-Acknowledge-api")
@@ -38,6 +38,7 @@ trait Environments {
   val cisDeductionsApiUrl: String                      = config.getString(s"environments.$env.cis-deductions-api")
 
   val apiPlatformTestUserUrl: String = config.getString(s"environments.$env.api-platform-test-user")
+  val selfAssessmentAssistApiBaseUrl: String = config.getString(s"environments.$env.self-assessment-assist-api-baseUrl")
 
   val apiPlatformAgentsAuthUrl: String     = config.getString(s"environments.$env.api-platform-agents-auth")
   val apiPlatformAgentsAuthTestUrl: String = config.getString(s"environments.$env.api-platform-agents-auth-test")

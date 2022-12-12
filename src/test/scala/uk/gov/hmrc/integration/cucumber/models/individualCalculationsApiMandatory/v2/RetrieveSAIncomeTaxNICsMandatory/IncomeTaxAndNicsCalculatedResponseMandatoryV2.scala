@@ -1,6 +1,11 @@
 /*
  * Copyright 2022 HM Revenue & Customs
  *
+ */
+
+/*
+ * Copyright 2020 HM Revenue & Customs
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -14,22 +19,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.test.api.service
+package uk.gov.hmrc.integration.cucumber.models.individualCalculationsApiMandatory.v2.RetrieveSAIncomeTaxNICsMandatory
 
-import play.api.libs.ws.StandaloneWSRequest
-import uk.gov.hmrc.test.api.client.HttpClient
-import uk.gov.hmrc.test.api.conf.TestConfiguration
+import play.api.libs.json._
+import uk.gov.hmrc.integration.cucumber.models.hateoas.HateoasLink
 
-import scala.concurrent.Await
-import scala.concurrent.duration._
+case class IncomeTaxAndNicsCalculatedResponseMandatoryV2(summary: CalculationSummaryV2, detail: CalculationDetailV2, links: Seq[HateoasLink])
 
-class TransactionalRiskingServiceClient extends HttpClient {
-  val host: String          = TestConfiguration.url("selfAssessmentAssist")
-  val helloWorldUrl: String = s"$host/hello"
-
-  def callHelloWorld(): StandaloneWSRequest#Self#Response =
-    Await.result(
-      get(helloWorldUrl),
-      100.seconds
-    )
+object IncomeTaxAndNicsCalculatedResponseMandatoryV2 {
+  implicit val format: OFormat[IncomeTaxAndNicsCalculatedResponseMandatoryV2] = Json.format[IncomeTaxAndNicsCalculatedResponseMandatoryV2]
 }

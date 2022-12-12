@@ -5,12 +5,9 @@
 
 package uk.gov.hmrc.integration.cucumber.stepdefs
 
-import play.api.libs.json.Json
 import uk.gov.hmrc.integration.cucumber.endpoints.BasePage._
 import uk.gov.hmrc.integration.cucumber.endpoints.ResponseBodies._
 import uk.gov.hmrc.integration.cucumber.endpoints.ResponseModels._
-import uk.gov.hmrc.integration.cucumber.models.Obligations.RetrieveEOPS.RetrieveEOPSResponse
-import uk.gov.hmrc.integration.cucumber.models.Obligations.RetrievePeriodicObligations.RetrievePeriodicObligationsResponse
 import uk.gov.hmrc.integration.cucumber.utils.json.JsonTools
 import uk.gov.hmrc.webdriver.SingletonDriver
 
@@ -19,6 +16,13 @@ import scala.util.Try
 class CommonStepDef extends BaseStepDef with JsonTools {
 
   When("""^generate report POSt call url: (.*), invoked with valid nino with request body: (.*)$""") {
+    (url: String, scenario:String) =>
+
+      if (scenario != "None")response = requestEmptyPOST(url, requestHeaders,Some(scenario))
+      else response = requestEmptyPOST(url, requestHeaders, None)
+  }
+
+  When("""^I generate report POST call url: (.*), invoked with valid nino with request body: (.*)$""") {
     (url: String, scenario:String) =>
 
       if (scenario != "None")response = requestEmptyPOST(url, requestHeaders,Some(scenario))
@@ -109,17 +113,6 @@ class CommonStepDef extends BaseStepDef with JsonTools {
         response.body.nonEmpty && findKeyAndMatchValue[String](key, value)
       case "Boolean" =>
         response.body.nonEmpty && findKeyAndMatchValue[Boolean](key, value)
-    }
-  }
-
-  Then("""^the (.*) body contains no empty arrays$""") { endpoint: String =>
-    endpoint match {
-      case "EOPS" =>
-        val model = Json.parse(response.body).as[RetrieveEOPSResponse]
-        assert(model.obligations.nonEmpty && model.obligations.forall(_.obligationDetails.nonEmpty))
-      case "Periodic" =>
-        val model = Json.parse(response.body).as[RetrievePeriodicObligationsResponse]
-        assert(model.obligations.nonEmpty && model.obligations.forall(_.obligationDetails.nonEmpty))
     }
   }
 
