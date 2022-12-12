@@ -18,11 +18,13 @@ object URLs {
 
   def retrieveRequestUrl(url: String): String = {
 
-    val saAssistBaseUrl: String                              = s"$saAssistApiUrl/${taxPayer.nino}/111190b4-06e3-4fef-a555-6fd0877dc7ca"
-    val saAssistBaseUrlWithInvalidNino: String               = s"$saAssistApiUrl/GB123456H/111190b4-06e3-4fef-a555-6fd0877dc7ca"
-    val saAssistGenerateInvalidCalc: String                  = s"$saAssistGenerateApiInvalidCalc/${taxPayer.nino}/111190b4-06e3-4fef-a555"
-    val saAssistAcknowledgeUrl: String                       = s"$saAssistAcknowledgeApiUrl/${taxPayer.nino}/a365c0b4-06e3-4fef-a555-16fd0877dc7c/a5fht738957jfjf845jgjf855"
-    val saAssistAcknowledgeInvalidReportID: String           = s"$saAssistAcknowledgeInvalidReportIDApiUrl/${taxPayer.nino}/a365c0b4-06e3-4fef-a555/a5fht738957jfjf845jgjf855"
+    val saAssistBaseUrl: String                = s"$saAssistApiUrl/${taxPayer.nino}/111190b4-06e3-4fef-a555-6fd0877dc7ca"
+    val saAssistBaseUrlForLocalTesting: String = s"$selfAssessmentAssistApiBaseUrl/reports/AA000000B/111190b4-06e3-4fef-a555-6fd0877dc7ca"
+    val saAssistBaseUrlWithInvalidNino: String = s"$saAssistApiUrl/GB123456H/111190b4-06e3-4fef-a555-6fd0877dc7ca"
+    val saAssistGenerateInvalidCalc: String    = s"$saAssistGenerateApiInvalidCalc/${taxPayer.nino}/111190b4-06e3-4fef-a555"
+    val saAssistAcknowledgeUrl: String = s"$saAssistAcknowledgeApiUrl/${taxPayer.nino}/a365c0b4-06e3-4fef-a555-16fd0877dc7c/a5fht738957jfjf845jgjf855"
+    val saAssistAcknowledgeInvalidReportID: String =
+      s"$saAssistAcknowledgeInvalidReportIDApiUrl/${taxPayer.nino}/a365c0b4-06e3-4fef-a555/a5fht738957jfjf845jgjf855"
     val saApiBaseUrl: String                                 = s"$saApiUrl/${taxPayer.nino}"
     val lossesApiBaseUrl: String                             = s"$individualLossesApiUrl/${taxPayer.nino}"
     val calcApiBaseUrl: String                               = s"$individualCalculationApiUrl/${taxPayer.nino}"
@@ -49,6 +51,7 @@ object URLs {
     val obligationsApiBaseUrl: String                        = s"$obligationsApiUrl/${taxPayer.nino}"
     val selfEmploymentBusinessApiBaseUrl: String             = s"$selfEmploymentBusinessApiUrl"
     val cisDeductionsApiBaseUrl: String                      = s"$cisDeductionsApiUrl/${taxPayer.nino}"
+    val authLoginApi: String                                 = s"$authLoginApiUrl"
 
     url match {
 
@@ -198,7 +201,7 @@ object URLs {
       case "RetrieveBusinessDetailsUrlForeign"  => s"$businessDetailsApiBaseUrl/XFIS12345678901"
 
       // ░▒▓▓▓ Self Assessment Accounts API ▓▓▓▒░
-      //V1
+      // V1
       // Payments and Liabilities
       case "RetrieveBalanceUrl"            => s"$accountsApiBaseUrl/balance"
       case "ListTransactionsUrl"           => s"$accountsApiBaseUrl/transactions?from=2019-10-10&to=2019-11-10"
@@ -214,7 +217,6 @@ object URLs {
       case "RetrieveCodingOutUnderpaymentsUserUrl"     => s"$accountsApiBaseUrl/2019-20/collection/tax-code?source=user"
       case "RetrieveCodingOutUnderpaymentsHmrcHeldUrl" => s"$accountsApiBaseUrl/2019-20/collection/tax-code?source=hmrcHeld"
       case "CodingOutUrl"                              => s"$accountsApiBaseUrl/2019-20/collection/tax-code"
-
 
       // ░▒▓▓▓ Self Assessment BISS API ▓▓▓▒░
       // V1
@@ -309,13 +311,13 @@ object URLs {
       // ░▒▓▓▓ Self Assessment API ▓▓▓▒░
 
       // Self Assessment Assist API
-      case "SaAssistGenerate" => s"$saAssistBaseUrl"
-      case "SaAssistAcknowledge" => s"$saAssistAcknowledgeUrl"
-      case "SaAssistGenerateInvalidCalc" => s"$saAssistGenerateInvalidCalc"
+      case "SaAssistGenerate"                   => s"$saAssistBaseUrl"
+      case "SaAssistGenerateLocalTesting"       => s"$saAssistBaseUrlForLocalTesting"
+      case "SaAssistAcknowledge"                => s"$saAssistAcknowledgeUrl"
+      case "SaAssistGenerateInvalidCalc"        => s"$saAssistGenerateInvalidCalc"
       case "SaAssistAcknowledgeInvalidReportID" => s"$saAssistAcknowledgeInvalidReportID"
-      case "SaAssistGenerateInvalidNino" => s"$saAssistBaseUrlWithInvalidNino"
-
-
+      case "SaAssistGenerateInvalidNino"        => s"$saAssistBaseUrlWithInvalidNino"
+      case "authLoginApi"                       => s"$authLoginApi"
 
       // Self Assessment Legacy
       // Self-Employments
@@ -336,7 +338,6 @@ object URLs {
       case "SePeriodOne2nd"               => s"$saApiBaseUrl/self-employments/$selfEmploymentId2nd/periods/2017-04-06_2017-07-05"
       case "SeAnnualSummary2nd"           => s"$saApiBaseUrl/self-employments/$selfEmploymentId2nd/2017-18"
       case "SeRetrieveEopsObligations2nd" => s"$saApiBaseUrl/self-employments/$selfEmploymentId2nd/end-of-period-statements/obligations"
-
 
       // UK Property
       case "UkpAddBusiness"                 => s"$saApiBaseUrl/uk-properties"

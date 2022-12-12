@@ -1,7 +1,15 @@
-#!/bin/bash -e
-ENV=${1:-local}
+#!/usr/bin/env bash
 
-# Scalafmt checks have been separated from the test command to avoid OutOfMemoryError in Jenkins
-sbt scalafmtCheckAll scalafmtSbtCheck
+BROWSER=${1:-chrome}
+JOURNEY=${2:-SelfAssessmentAssist- LOCAL TESTING}
 
-sbt -Denvironment=$ENV "testOnly uk.gov.hmrc.test.api.specs.*"
+RUNNER="SelfAssessmentTestRunner"
+
+echo "Running browser tests..."
+echo "=========================================="
+echo "Browser:              ${BROWSER}"
+echo "Journey:              ${JOURNEY}"
+echo "=========================================="
+sbt -Dbrowser=${BROWSER} "testOnly uk.gov.hmrc.integration.cucumber.utils.runners.SaAssistApi.SelfAssessmentAssistAPI.SelfAssessmentTestRunner"
+
+

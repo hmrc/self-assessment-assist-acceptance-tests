@@ -14,6 +14,7 @@ import org.scalatest.matchers.should.Matchers
 import play.api.libs.json.Json
 import scalaj.http.{Http, HttpOptions, HttpRequest, HttpResponse}
 import uk.gov.hmrc.integration.cucumber.config.Environments
+import uk.gov.hmrc.integration.cucumber.endpoints.Auth.AuthLoginApi.{authTokenGeneratorBodyForLocalTesting, authTokenGeneratorBodyWithInvalidNinoForLocalTesting, postNinoBodyForLocalTesting}
 import uk.gov.hmrc.integration.cucumber.endpoints.RequestBodies.retrieveRequestBody
 import uk.gov.hmrc.integration.cucumber.endpoints.URLs.retrieveRequestUrl
 import uk.gov.hmrc.integration.cucumber.models.domain.Nino
@@ -64,6 +65,13 @@ trait BasePage extends Matchers with ScalaDsl with Environments with BaseStepDef
     LocalDateTime.now.toString.split("T")(0)
   }
 
+  val validNinoForLocalTesting: String = "AA000000B"
+  val invalidNinoForLocalTesting: String = "AA0000000"
+  val reportIdForLocalTesting: String = "a365c0b4-06e3-4fef-a555-16fd0877dc7c"
+  val invalidReportIdForLocalTesting: String = "a365c0b4-06e3-4fef-a555-16fd0877dc7"
+  val correlationIdForLocalTesting: String = "a5fht738957jfjf845jgjf855"
+  val invalidCorrelationIdForLocalTesting: String = "a5fht738957jfjf845jgjf85"
+
   def getTaxYear: String = Seq(LocalDateTime.now.getYear.toString, LocalDateTime.now.plusYears(1).getYear.toString.takeRight(2)).mkString("-")
 
   // ░▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ TEST PARAMETERS ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▒░
@@ -75,7 +83,7 @@ trait BasePage extends Matchers with ScalaDsl with Environments with BaseStepDef
   var taxPayer: TaxPayer             = TaxPayer(null, null, null, None)
   var request: Request               = Request(null, null, None, requestHeaders, None)
   var response: HttpResponse[String] = _
-  var apiVersion: String             = "2.0"
+  var apiVersion: String             = "1.0"
   var selfEmploymentId: String       = _
   var selfEmploymentId2nd: String    = _
   var idValue: String                = _
@@ -86,10 +94,15 @@ trait BasePage extends Matchers with ScalaDsl with Environments with BaseStepDef
   val contentTypeUrlEncodedHeader: Map[String, String] = Map("Content-Type" -> "application/x-www-form-urlencoded")
 
   def requestHeaders: Map[String, String] = Map(
-    // "Accept"        -> s"application/vnd.hmrc.$apiVersion+json",
+    "Accept"        -> s"application/vnd.hmrc.$apiVersion+json",
     "Authorization" -> s"${taxPayer.accessToken}",
-    "Content-Type"  -> "application/json",
-    "Accept"  -> "application/vnd.hmrc.1.0+json"
+    "Content-Type"  -> "application/json"
+  )
+
+  def requestHeadersForPostNinoCall: Map[String, String] = Map(
+    "Accept"        -> s"application/vnd.hmrc.$apiVersion+json",
+    "Authorization" -> s"",
+    "Content-Type"  -> "application/json"
   )
 
   object AffinityGroup extends Enumeration {
@@ -118,7 +131,6 @@ trait BasePage extends Matchers with ScalaDsl with Environments with BaseStepDef
 
     Nino(s"$prefix$digits$suffix")
   }
-
 
   lazy val randomBusinessId: String = {
     val initialChar = "X"
@@ -252,6 +264,131 @@ trait BasePage extends Matchers with ScalaDsl with Environments with BaseStepDef
     response
   }
 
+  def postNinoLocalTesting(commonHeaders: Map[String, String] = requestHeadersForPostNinoCall,
+                           govTestScenario: Option[String] = None): HttpResponse[String] = {
+
+    val postBody                                   = postNinoBodyForLocalTesting
+    val postUrl                                    = "http://localhost:9612/pay-as-you-earn/02.00.00/individuals/AA000000"
+    val govTestScenarioHeader: Map[String, String] = govTestScenario.fold(Map.empty[String, String])(value => Map("Gov-Test-Scenario" -> value))
+
+    request = Request("POST", postUrl, Some(postBody), commonHeaders, Some(govTestScenarioHeader))
+    response = getHttpWithTimeout(postUrl).postData(postBody).headers(commonHeaders ++ govTestScenarioHeader).copy(proxyConfig = proxy).asString
+    print("\n"+"The response at the post nino call is : "+response )
+
+    if (printConfig) printRequestAndResponseLog()
+    response
+  }
+
+  def authTokenGeneratorLocalTesting(commonHeaders: Map[String, String] = requestHeadersForPostNinoCall,
+                                     govTestScenario: Option[String] = None): Map[String, String] = {
+
+    val postBody                                   = authTokenGeneratorBodyForLocalTesting
+    val postUrl                                    = "http://localhost:8585/government-gateway/session/login"
+    val govTestScenarioHeader: Map[String, String] = govTestScenario.fold(Map.empty[String, String])(value => Map("Gov-Test-Scenario" -> value))
+
+    request = Request("POST", postUrl, Some(postBody), commonHeaders, Some(govTestScenarioHeader))
+    response = getHttpWithTimeout(postUrl).postData(postBody).headers(commonHeaders ++ govTestScenarioHeader).copy(proxyConfig = proxy).asString
+    print("\n"+"The response at the auth token generator is : "+response )
+
+    val bearerToken: String = response.header("Authorization").get
+    print("\n"+"Bearer token is :" + bearerToken)
+    commonHeaders + ("Authorization" -> bearerToken)
+  }
+
+  def generateReportLocalTesting(commonHeaders: Map[String, String] = requestHeadersForPostNinoCall,
+                                 govTestScenario: Option[String] = None): HttpResponse[String] = {
+    val headers = authTokenGeneratorLocalTesting(commonHeaders, govTestScenario)
+
+    val postUrl                                    = s"http://localhost:8342/reports/$validNinoForLocalTesting/111190b4-06e3-4fef-a555-6fd0877dc7ca"
+    val govTestScenarioHeader: Map[String, String] = govTestScenario.fold(Map.empty[String, String])(value => Map("Gov-Test-Scenario" -> value))
+    request = Request("POST", postUrl, None, headers, Some(govTestScenarioHeader))
+    response = getHttpWithTimeout(postUrl).postData("{}").headers(headers ++ govTestScenarioHeader).copy(proxyConfig = proxy).asString
+    print("\n"+"The response at the generate report is : "+response )
+
+    val reportID : String = response.body.split("\"reportId\":\"")(1).split("\"")(0)
+    print("\n"+"ReportId is :" +reportID)
+
+    val correlationID : String = response.body.split("\"correlationId\":\"")(1).split("\"")(0)
+    print("\n"+"CorrelationId is :" +correlationID)
+
+
+    if (printConfig) printRequestAndResponseLog()
+    response
+  }
+
+  def generateAcknowledgeReportLocalTesting(commonHeaders: Map[String, String] = requestHeadersForPostNinoCall,
+                                            govTestScenario: Option[String] = None): HttpResponse[String] = {
+
+    val headers = authTokenGeneratorLocalTesting(commonHeaders,govTestScenario)
+
+    val postUrl                                    = s"http://localhost:8342/reports/acknowledge/$validNinoForLocalTesting/$reportIdForLocalTesting/$correlationIdForLocalTesting"
+    val govTestScenarioHeader: Map[String, String] = govTestScenario.fold(Map.empty[String, String])(value => Map("Gov-Test-Scenario" -> value))
+    request = Request("POST", postUrl, None, headers, Some(govTestScenarioHeader))
+    response = getHttpWithTimeout(postUrl).postData("{}").headers(headers ++ govTestScenarioHeader).copy(proxyConfig = proxy).asString
+    print("\n"+"The response at the acknowledge report is : "+response )
+
+    if (printConfig) printRequestAndResponseLog()
+    response
+  }
+
+  //***** Negative scenarios ****** \\
+  def authTokenGeneratorWithInvalidNinoLocalTesting(commonHeaders: Map[String, String] = requestHeadersForPostNinoCall,
+                                     govTestScenario: Option[String] = None): HttpResponse[String] = {
+
+    val postBody                                   = authTokenGeneratorBodyWithInvalidNinoForLocalTesting
+    val postUrl                                    = "http://localhost:8585/government-gateway/session/login"
+    val govTestScenarioHeader: Map[String, String] = govTestScenario.fold(Map.empty[String, String])(value => Map("Gov-Test-Scenario" -> value))
+
+    request = Request("POST", postUrl, Some(postBody), commonHeaders, Some(govTestScenarioHeader))
+    response = getHttpWithTimeout(postUrl).postData(postBody).headers(commonHeaders ++ govTestScenarioHeader).copy(proxyConfig = proxy).asString
+    print("\n"+"The response at the auth token generator is : "+response )
+    assert(response.body contains(invalidNinoForLocalTesting+" is not a valid nino"))
+
+    if (printConfig) printRequestAndResponseLog()
+    response
+  }
+
+  def generateReportWithInvalidNinoLocalTesting(commonHeaders: Map[String, String] = requestHeadersForPostNinoCall,
+                                 govTestScenario: Option[String] = None): HttpResponse[String] = {
+    val headers = authTokenGeneratorLocalTesting(commonHeaders, govTestScenario)
+
+    val postUrl                                    = s"http://localhost:8342/reports/$invalidNinoForLocalTesting/111190b4-06e3-4fef-a555-6fd0877dc7ca"
+    val govTestScenarioHeader: Map[String, String] = govTestScenario.fold(Map.empty[String, String])(value => Map("Gov-Test-Scenario" -> value))
+    request = Request("POST", postUrl, None, headers, Some(govTestScenarioHeader))
+    response = getHttpWithTimeout(postUrl).postData("{}").headers(headers ++ govTestScenarioHeader).copy(proxyConfig = proxy).asString
+    print("\n"+"The response at the generate report is : "+response )
+    if (printConfig) printRequestAndResponseLog()
+    response
+  }
+
+  def generateAcknowledgeReportWithInvalidReportIdLocalTesting(commonHeaders: Map[String, String] = requestHeadersForPostNinoCall,
+                                            govTestScenario: Option[String] = None): HttpResponse[String] = {
+
+    val headers = authTokenGeneratorLocalTesting(commonHeaders,govTestScenario)
+
+    val postUrl                                    = s"http://localhost:8342/reports/acknowledge/$validNinoForLocalTesting/$invalidReportIdForLocalTesting/$correlationIdForLocalTesting"
+    val govTestScenarioHeader: Map[String, String] = govTestScenario.fold(Map.empty[String, String])(value => Map("Gov-Test-Scenario" -> value))
+    request = Request("POST", postUrl, None, headers, Some(govTestScenarioHeader))
+    response = getHttpWithTimeout(postUrl).postData("{}").headers(headers ++ govTestScenarioHeader).copy(proxyConfig = proxy).asString
+
+    if (printConfig) printRequestAndResponseLog()
+    response
+  }
+
+  def generateAcknowledgeReportWithInvalidCorrelationIdLocalTesting(commonHeaders: Map[String, String] = requestHeadersForPostNinoCall,
+                                                               govTestScenario: Option[String] = None): HttpResponse[String] = {
+
+    val headers = authTokenGeneratorLocalTesting(commonHeaders,govTestScenario)
+
+    val postUrl                                    = s"http://localhost:8342/reports/acknowledge/$validNinoForLocalTesting/$reportIdForLocalTesting/$invalidCorrelationIdForLocalTesting"
+    val govTestScenarioHeader: Map[String, String] = govTestScenario.fold(Map.empty[String, String])(value => Map("Gov-Test-Scenario" -> value))
+    request = Request("POST", postUrl, None, headers, Some(govTestScenarioHeader))
+    response = getHttpWithTimeout(postUrl).postData("{}").headers(headers ++ govTestScenarioHeader).copy(proxyConfig = proxy).asString
+
+    if (printConfig) printRequestAndResponseLog()
+    response
+  }
+
   def requestPOST(url: String,
                   body: String,
                   commonHeaders: Map[String, String] = requestHeaders,
@@ -350,7 +487,7 @@ trait BasePage extends Matchers with ScalaDsl with Environments with BaseStepDef
        } else "") +
       s"\nRequest Gov-Test-Scenario: " + (if (request.govTestScenario.get.nonEmpty) s"${request.govTestScenario.get}" else "None") +
       s"\nRequest headers: \n${"  " + request.headers.mkString("\n  ")}" +
-      (if (expectedBody.nonEmpty) s"\n\nExpected response body: \n${Json.prettyPrint(Json.parse(expectedBody.get))}" else "") +
+     // (if (expectedBody.nonEmpty) s"\n\nExpected response body: \n${Json.prettyPrint(Json.parse(expectedBody.get))}" else "") +
       s"\n\nResponse code: ${response.code}" +
       s"\nResponse body: ${if (response.body.nonEmpty) s"\n${Json.prettyPrint(Json.parse(response.body))}" else """¯\_(ツ)_/¯"""}" +
       s"\nResponse headers:\n${"  " + response.headers.mkString("\n")}\n" +
