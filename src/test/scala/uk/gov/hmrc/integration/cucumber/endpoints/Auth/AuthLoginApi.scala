@@ -93,6 +93,77 @@ object AuthLoginApi extends JsonTools {
     body.toString
   }
 
+  def postNinoBodyForLocalTesting: String =
+    s"""
+      |{
+      |  "nino": "AA000000",
+      |  "ninoSuffix": "C",
+      |  "names": {
+      |    "1": {
+      |      "sequenceNumber": 12345,
+      |      "firstForenameOrInitial": "Jane",
+      |      "secondForenameOrInitial": "A",
+      |      "surname": "Doe",
+      |      "startDate": "2001-02-02"
+      |    } },
+      |  "sex": "F",
+      |  "dateOfBirth": "1987-02-20",
+      |  "deceased": false,
+      |  "addresses": {
+      |    "1": {
+      |      "line1": "1 Oxford Road",
+      |      "line2": "Town Centre",
+      |      "line3": "London",
+      |      "line4": "London",
+      |      "line5": "England",
+      |      "postcode": "NW2 3CD",
+      |      "countryCode": 1,
+      |      "sequenceNumber": 1,
+      |      "startDate": "2001-02-02"
+      |    }
+      |  },
+      |  "phoneNumbers": {
+      |    "1": {
+      |      "telephoneNumber": "01999123459",
+      |      "telephoneType": 1
+      |    }
+      |  },
+      |  "accountStatus": 0,
+      |  "manualCorrespondenceInd": false,
+      |  "dateOfEntry": "2001-02-02",
+      |  "dateOfRegistration": "2001-02-02",
+      |  "registrationType": 0,
+      |  "hasSelfAssessmentAccount": false,
+      |  "audioOutputRequired": false,
+      |  "brailleOutputRequired": false,
+      |  "largePrintOutputRequired": false,
+      |  "welshOutputRequired": false
+      |}
+      """.stripMargin
+  def authTokenGeneratorBodyForLocalTesting: String =
+    s"""
+      |{
+      |	"credId": "123456789",
+      |    "affinityGroup": "Individual",
+      |    "confidenceLevel": 200,
+      |    "credentialStrength": "strong",
+      |    "nino": "$validNinoForLocalTesting",
+      |	"enrolments": []
+      |}
+      """.stripMargin
+
+  def authTokenGeneratorBodyWithInvalidNinoForLocalTesting: String =
+    s"""
+       |{
+       |	"credId": "123456789",
+       |    "affinityGroup": "Individual",
+       |    "confidenceLevel": 200,
+       |    "credentialStrength": "strong",
+       |    "nino": "$invalidNinoForLocalTesting",
+       |	"enrolments": []
+       |}
+      """.stripMargin
+
   def mainBody(nino: String, affinityGroup: String, credentialRole: String, enrolments: String, delegatedEnrolments: String): String =
     s"""
        | {

@@ -89,6 +89,14 @@ object CommonErrorsJson {
       |}
     """.stripMargin
 
+  val FORMAT_REPORT_ID: String =
+    """
+      |{
+      |    "code": "FORMAT_REPORT_ID",
+      |    "message": "The provided Report ID is invalid"
+      |}
+    """.stripMargin
+
   val RULE_INSOLVENT_TRADER: String =
     """
       |{

@@ -8,10 +8,8 @@ package uk.gov.hmrc.integration.cucumber.stepdefs
 import io.cucumber.datatable.DataTable
 import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.integration.cucumber.endpoints.BasePage._
-import uk.gov.hmrc.integration.cucumber.endpoints.ResponseModelStructures._
-import uk.gov.hmrc.integration.cucumber.utils.json.JsonTools
-import uk.gov.hmrc.integration.cucumber.utils.ModelStructure.toPaths
 
+import uk.gov.hmrc.integration.cucumber.utils.json.JsonTools
 import scala.collection.JavaConverters._
 
 class MergeResultsStepDef extends BaseStepDef with JsonTools {
@@ -41,17 +39,4 @@ class MergeResultsStepDef extends BaseStepDef with JsonTools {
       cumulativeJsonPaths = cumulativeJsonPaths ++ pathsFor(responseJson)
     }
   }
-
-  Then("""^all fields are covered for model (.*)$""") { modelName: String =>
-    val expectedPaths = toPaths(responseModelStructureFor(modelName)).toSet
-
-    withClue("Merged responses contain additional paths") {
-      cumulativeJsonPaths -- expectedPaths shouldBe empty
-    }
-
-    withClue("Merged responses are missing paths") {
-      expectedPaths -- cumulativeJsonPaths shouldBe empty
-    }
-  }
-
 }

@@ -11,8 +11,6 @@ import uk.gov.hmrc.integration.cucumber.endpoints.Auth.TestUserCreation._
 import uk.gov.hmrc.integration.cucumber.endpoints.BasePage._
 import uk.gov.hmrc.integration.cucumber.utils.data.TestData
 
-
-
 class GenerateTestUsersStepDef extends BaseStepDef with TestData {
 
   Then("""^generate tax payers for given environment$""") { () =>
@@ -32,6 +30,52 @@ class GenerateTestUsersStepDef extends BaseStepDef with TestData {
         print(AffinityGroup.Individual)
     }
   }
+
+  Given("""^I make a POST call to nino to activate the services$""") { () =>
+    postNinoLocalTesting()
+  }
+
+  Given("""^I make a POST call to generate auth token with valid nino$""") { () =>
+    authTokenGeneratorLocalTesting()
+  }
+
+  Given("""^I make a POST call to generate auth token with invalid nino$""") { () =>
+    authTokenGeneratorWithInvalidNinoLocalTesting()
+  }
+
+  Given("""^I make a POST call to generate report with valid nino$""") { () =>
+    authTokenGeneratorLocalTesting()
+    generateReportLocalTesting()
+  }
+
+  Given("""^I make a POST call to generate report with invalid nino$""") { () =>
+    authTokenGeneratorLocalTesting()
+    generateReportWithInvalidNinoLocalTesting()
+  }
+
+  Given("""^I make a POST call to generate acknowledge report with valid nino$""") { () =>
+    authTokenGeneratorLocalTesting()
+    generateReportLocalTesting()
+    generateAcknowledgeReportLocalTesting()
+  }
+
+  Given("""^I make a POST call to generate acknowledge report with invalid reportID nino$""") { () =>
+    authTokenGeneratorLocalTesting()
+    generateReportLocalTesting()
+    generateAcknowledgeReportWithInvalidReportIdLocalTesting()
+  }
+
+  Given("""^I make a POST call to generate acknowledge report with invalid correlationID nino$""") { () =>
+    postNinoLocalTesting()
+    authTokenGeneratorLocalTesting()
+    generateReportLocalTesting()
+    generateAcknowledgeReportWithInvalidCorrelationIdLocalTesting()
+  }
+
+  And("""^I close the browser$""") { () =>
+    driver.quit()
+  }
+
   Given("""^generate tax payers with invalid nino$""") { () =>
     taxPayer = createSATestUserWithInvalidNino(AffinityGroup.Individual)
     printTaxPayer()
@@ -65,11 +109,9 @@ class GenerateTestUsersStepDef extends BaseStepDef with TestData {
   }
 
   Then("""^I can see the auth token page header : (.*)$""") { (expectedPageHeader: String) =>
-   val actualPageHeader = findElementByTagName("h1").getText
+    val actualPageHeader = findElementByTagName("h1").getText
     Assert.assertEquals(actualPageHeader, expectedPageHeader)
   }
-
-
 
   def print(affinityGroup: String, desc: String = "none"): Unit = {
     val client: String = if (affinityGroup == AffinityGroup.Agent) "client " else ""
