@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-BROWSER=${1:-chrome}
+BROWSER=${1:-remote-chrome}
 JOURNEY=${2:-SelfAssessmentAssist- LOCAL TESTING}
 
 RUNNER="SelfAssessmentTestRunner"
