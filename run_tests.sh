@@ -10,6 +10,6 @@ echo "=========================================="
 echo "Browser:              ${BROWSER}"
 echo "Journey:              ${JOURNEY}"
 echo "=========================================="
-sbt -Dbrowser=${BROWSER} -Denvironment=local "testOnly ${RUNNER}"
+sbt -Denvironment=local "testOnly ${RUNNER}"
 
 
