@@ -5,12 +5,11 @@ JOURNEY=${2:-SelfAssessmentAssist- LOCAL TESTING}
 
 RUNNER="uk.gov.hmrc.integration.cucumber.utils.runners.SaAssistApi.SelfAssessmentAssistAPI.SelfAssessmentTestRunner"
 
-echo "Running browser tests..."
+echo "Running tests..."
 echo "=========================================="
 echo "Browser:              ${BROWSER}"
-echo "Env:                  local"
 echo "Journey:              ${JOURNEY}"
 echo "=========================================="
-sbt -Dbrowser=${BROWSER} -Denvironment=local "testOnly ${RUNNER}"
+sbt -Denvironment=local "testOnly ${RUNNER}"
 
 
