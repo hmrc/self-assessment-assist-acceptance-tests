@@ -78,7 +78,7 @@ Feature: Test self assessment assist generate report API
     And the response body is FORMAT_NINO
     And I close the browser
 
-  @api-tests @local
+  @api-tests @wip
   Scenario: POST call to generate acknowledge report with invalid reportID - Local Testing
     Given I make a POST call to generate acknowledge report with invalid reportID nino
     Then the response code is 400
