@@ -24,11 +24,13 @@ import uk.gov.hmrc.integration.cucumber.utils.data.TestData
 
 class GenerateTestUsersStepDef extends BaseStepDef with TestData {
 
-  Then("""^generate tax payers for given environment$""") { () =>
+  Then("""^I generate tax payers for given environment$""") { () =>
     env match {
       case "local" =>
         taxPayer = createLocalTestUser(AffinityGroup.Individual)
         print(AffinityGroup.Individual)
+        taxPayer = createLocalTestUser(AffinityGroup.Organisation)
+        print(AffinityGroup.Organisation)
         taxPayer = createLocalTestUser(AffinityGroup.Agent)
         print(AffinityGroup.Agent)
       case "externaltest" =>
@@ -87,7 +89,7 @@ class GenerateTestUsersStepDef extends BaseStepDef with TestData {
     driver.quit()
   }
 
-  Given("""^generate tax payers with invalid nino$""") { () =>
+  Given("""^I generate tax payers with invalid nino$""") { () =>
     taxPayer = createSATestUserWithInvalidNino(AffinityGroup.Individual)
     printTaxPayer()
   }
