@@ -17,6 +17,7 @@
 package uk.gov.hmrc.integration.cucumber.endpoints
 
 import uk.gov.hmrc.integration.cucumber.endpoints.BasePage._
+import uk.gov.hmrc.integration.cucumber.stepdefs.Credentials
 
 import java.time.LocalDateTime
 
@@ -26,6 +27,17 @@ object URLs {
 
   def getNextTaxYear: String =
     Seq((LocalDateTime.now.getYear + 1).toString, LocalDateTime.now.plusYears(2).getYear.toString.takeRight(2)).mkString("-")
+
+  def retrieveRequestUrlWithCredentials(url: String, credentials: Credentials): String = {
+    val saApiBaseUrl: String           = s"$saApiUrl/${taxPayer.nino}"
+    val saAssistAcknowledgeUrl: String = s"$saAssistAcknowledgeApiUrl/${taxPayer.nino}/${credentials.reportId}/${credentials.correlationId}"
+    val saAssistBaseUrl: String                = s"$saAssistApiUrl/${taxPayer.nino}/111190b4-06e3-4fef-a555-6fd0877dc7ca"
+    url match {
+      case "SaAssistAcknowledge" => s"$saAssistAcknowledgeUrl"
+      case "SaAssistGenerate" => s"$saAssistBaseUrl"
+      case _                     => s"$saApiBaseUrl/didnt-find-url"
+    }
+  }
 
   def retrieveRequestUrl(url: String): String = {
 

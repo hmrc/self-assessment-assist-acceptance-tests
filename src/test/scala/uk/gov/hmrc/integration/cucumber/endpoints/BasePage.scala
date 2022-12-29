@@ -29,7 +29,7 @@ import uk.gov.hmrc.integration.cucumber.endpoints.Auth.AuthLoginApi.{authTokenGe
 import uk.gov.hmrc.integration.cucumber.endpoints.RequestBodies.retrieveRequestBody
 import uk.gov.hmrc.integration.cucumber.endpoints.URLs.retrieveRequestUrl
 import uk.gov.hmrc.integration.cucumber.models.domain.Nino
-import uk.gov.hmrc.integration.cucumber.stepdefs.BaseStepDef
+import uk.gov.hmrc.integration.cucumber.stepdefs.{BaseStepDef, Credentials}
 import uk.gov.hmrc.integration.cucumber.utils.Zap
 import uk.gov.hmrc.integration.cucumber.utils.driver.Driver
 
@@ -423,6 +423,24 @@ trait BasePage extends Matchers with ScalaDsl with Environments with BaseStepDef
                        govTestScenario: Option[String] = None): HttpResponse[String] = {
 
     val postUrl                                    = URLs.retrieveRequestUrl(url)
+    val govTestScenarioHeader: Map[String, String] = govTestScenario.fold(Map.empty[String, String])(value => Map("Gov-Test-Scenario" -> value))
+
+    request = Request("POST", postUrl, None, commonHeaders, Some(govTestScenarioHeader))
+    response =
+      getHttpWithTimeout(postUrl).method("POST").headers(commonHeaders ++ govTestScenarioHeader).postData("").copy(proxyConfig = proxy).asString
+
+    if (printConfig) printRequestAndResponseLog()
+    printRequestAndResponseLog()
+
+    response
+  }
+
+  def requestEmptyPOSTWithCredentials(url: String,
+                                      commonHeaders: Map[String, String] = requestHeaders,
+                                      govTestScenario: Option[String] = None,
+                                      credentials: Credentials): HttpResponse[String] = {
+
+    val postUrl                                    = URLs.retrieveRequestUrlWithCredentials(url, credentials)
     val govTestScenarioHeader: Map[String, String] = govTestScenario.fold(Map.empty[String, String])(value => Map("Gov-Test-Scenario" -> value))
 
     request = Request("POST", postUrl, None, commonHeaders, Some(govTestScenarioHeader))
