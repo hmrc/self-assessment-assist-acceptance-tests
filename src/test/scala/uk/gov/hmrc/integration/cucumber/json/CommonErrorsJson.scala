@@ -213,6 +213,14 @@ object CommonErrorsJson {
       |}
     """.stripMargin
 
+  val FORMAT_CALC_ID: String =
+    """
+      |{
+      |  "code" : "FORMAT_CALC_ID",
+      |  "message" : "The provided Calculation ID is invalid"
+      |}
+    """.stripMargin
+
   val FORMAT_TAX_YEAR: String =
     """
       |{

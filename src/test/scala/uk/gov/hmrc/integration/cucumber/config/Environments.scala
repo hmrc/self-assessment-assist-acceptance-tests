@@ -17,7 +17,6 @@
 package uk.gov.hmrc.integration.cucumber.config
 
 import com.typesafe.config.ConfigFactory
-//import uk.gov.hmrc.integration.cucumber.endpoints.BasePage.removeWhiteSpace
 
 trait Environments {
 

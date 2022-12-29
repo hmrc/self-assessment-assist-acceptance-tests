@@ -29,6 +29,6 @@ import org.junit.runner.RunWith
     "json:target/cucumber.json"),
   tags = "@local"
 )
-class SelfAssessmentTestRunner
+class SelfAssessmentTestRunnerLocal
 
-object SelfAssessmentTestRunner extends SelfAssessmentTestRunner
+object SelfAssessmentTestRunnerLocal extends SelfAssessmentTestRunnerLocal
