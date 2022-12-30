@@ -170,7 +170,7 @@ object AuthLoginApi extends JsonTools {
        |    "affinityGroup": "Individual",
        |    "confidenceLevel": 200,
        |    "credentialStrength": "strong",
-       |    "nino": "$invalidNinoForLocalTesting",
+       |    "nino": "$unformattedNinoForLocalTesting",
        |	"enrolments": []
        |}
       """.stripMargin

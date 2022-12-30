@@ -18,21 +18,25 @@ package uk.gov.hmrc.integration.cucumber.utils.driver
 
 import com.typesafe.scalalogging.LazyLogging
 import org.openqa.selenium.WebDriver
-import org.openqa.selenium.chrome.ChromeOptions
 import uk.gov.hmrc.webdriver.SingletonDriver
 
-object Driver extends LazyLogging {
+import scala.util.Try
 
+trait BrowserDriver extends LazyLogging {
   logger.info(
     s"Instantiating Browser: ${sys.props.getOrElse("browser", "'browser' System property not set. This is required")}"
   )
 
-  if (!Option(System.getProperty("browser")).exists(_.nonEmpty)) {
+  if (!Option(System.getProperty("browser")).exists(_.length > 0)) {
     System.setProperty("browser", "chrome")
   }
 
-  val options = new ChromeOptions()
-  options.setHeadless(false) // Set value to false if the browser type 'chrome' is used in script files to view UI
-  lazy val instance: WebDriver = SingletonDriver.getInstance(Some(options))
+  implicit lazy val driver: WebDriver = SingletonDriver.getInstance()
+
+  val debug: Boolean = sys.props.getOrElse("drivernotquit", "false").toBoolean
+  if (!debug)
+    sys.addShutdownHook {
+      Try(driver.quit())
+    }
 }
 

@@ -28,6 +28,10 @@ class SaAssistGenerateReport extends BaseStepDef with TestData {
       case "development" =>
         taxPayer = createUserAuthorisedOnApiPlatform(AffinityGroup.Individual)
         printGeneratedTaxPayer(AffinityGroup.Individual)
+        taxPayer = createUserAuthorisedOnApiPlatform(AffinityGroup.Individual)
+        printGeneratedTaxPayer(AffinityGroup.Agent)
+        taxPayer = createUserAuthorisedOnApiPlatform(AffinityGroup.Individual)
+        printGeneratedTaxPayer(AffinityGroup.Organisation)
     }
   }
 
@@ -54,6 +58,6 @@ class SaAssistGenerateReport extends BaseStepDef with TestData {
 
       def printGeneratedTaxPayer(affinityGroup: String): Unit = {
         val client: String = if(affinityGroup == AffinityGroup.Agent) "client " else ""
-        println(s"\n░░░▒▒▒▓▓▓▓ VAT API ▓▓▓▒▒▒░░░\naffinity group: $affinityGroup\n${client}identifier: ${taxPayer.nino}\naccess token: ${taxPayer.accessToken}\n")
+        println(s"\n░░░▒▒▒▓▓▓▓ Self Assessment Assist ▓▓▓▒▒▒░░░\naffinity group: $affinityGroup\n${client}identifier: ${taxPayer.nino}\naccess token: ${taxPayer.accessToken}\n")
       }
   }

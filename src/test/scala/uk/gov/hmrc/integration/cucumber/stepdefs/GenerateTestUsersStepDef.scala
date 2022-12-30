@@ -41,9 +41,19 @@ class GenerateTestUsersStepDef extends BaseStepDef with TestData {
     generateReportLocalTesting()
   }
 
+  Given("""^I make a POST call to generate report with unformatted nino$""") { () =>
+    authTokenGeneratorLocalTesting()
+    generateReportWithUnformattedNinoLocalTesting()
+  }
+
   Given("""^I make a POST call to generate report with invalid nino$""") { () =>
     authTokenGeneratorLocalTesting()
     generateReportWithInvalidNinoLocalTesting()
+  }
+
+  Given("""^I make a POST call to generate report with invalid calculationID nino$""") { () =>
+    authTokenGeneratorLocalTesting()
+    generateReportWithInvalidCalculationIdLocalTesting()
   }
 
   Given("""^I make a POST call to generate acknowledge report with valid nino$""") { () =>

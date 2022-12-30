@@ -6,7 +6,8 @@ object Dependencies {
     "com.typesafe"         % "config"                 % "1.4.2",
     "uk.gov.hmrc"         %% "webdriver-factory"      % "0.39.0",
     "com.typesafe.play"   %% "play-json"              % "2.9.2",
-    "org.scalatest"       %% "scalatest"              % "3.2.11",
+    "org.scalatest"       %% "scalatest"              % "3.2.13",
+    "org.scalatestplus"   %% "selenium-4-2"           % "3.2.13.0",
     "io.cucumber"         %% "cucumber-scala"         % "8.2.2",
     "io.cucumber"          % "cucumber-junit"         % "7.2.3",
     "io.cucumber"          % "cucumber-picocontainer" % "7.10.1",
@@ -17,4 +18,5 @@ object Dependencies {
     "org.apache.commons"   % "commons-lang3"          % "3.12.0",
     "com.google.code.gson" % "gson"                   % "2.9.0"
   ).map(_ % Test)
+
 }
