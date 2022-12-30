@@ -29,9 +29,9 @@ import uk.gov.hmrc.integration.cucumber.endpoints.Auth.AuthLoginApi.{authTokenGe
 import uk.gov.hmrc.integration.cucumber.endpoints.RequestBodies.retrieveRequestBody
 import uk.gov.hmrc.integration.cucumber.endpoints.URLs.retrieveRequestUrl
 import uk.gov.hmrc.integration.cucumber.models.domain.Nino
-import uk.gov.hmrc.integration.cucumber.stepdefs.BaseStepDef
+import uk.gov.hmrc.integration.cucumber.stepdefs.{BaseStepDef, Credentials}
 import uk.gov.hmrc.integration.cucumber.utils.Zap
-import uk.gov.hmrc.integration.cucumber.utils.driver.Driver
+import uk.gov.hmrc.integration.cucumber.utils.driver.BrowserDriver
 
 import java.net.{InetSocketAddress, Proxy}
 import java.time.{Duration, LocalDateTime}
@@ -40,12 +40,9 @@ import scala.util.Random
 
 object BasePage extends BasePage
 
-trait BasePage extends Matchers with ScalaDsl with Environments with BaseStepDef {
+trait BasePage extends Matchers with ScalaDsl with Environments with BaseStepDef with BrowserDriver {
 
   // ░▒▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ FRONTEND UI FUNCTIONS ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▒░
-
-  val driver: WebDriver = Driver.instance
-  //val driver: WebDriver = Driver.instance
 
   def navigateTo(url: String): Unit = driver.navigate().to(url)
 
@@ -78,11 +75,14 @@ trait BasePage extends Matchers with ScalaDsl with Environments with BaseStepDef
   }
 
   val validNinoForLocalTesting: String = "AA000000B"
-  val invalidNinoForLocalTesting: String = "AA0000000"
+  val unformattedNinoForLocalTesting: String = "AA0000000"
+  val invalidNinoForLocalTesting: String = "AA010000B"
   val reportIdForLocalTesting: String = "a365c0b4-06e3-4fef-a555-16fd0877dc7c"
   val invalidReportIdForLocalTesting: String = "a365c0b4-06e3-4fef-a555-16fd0877dc7"
   val correlationIdForLocalTesting: String = "a5fht738957jfjf845jgjf855"
   val invalidCorrelationIdForLocalTesting: String = "a5fht738957jfjf845jgjf85"
+  val validCalculationIdForLocalTesting: String = "111190b4-06e3-4fef-a555-6fd0877dc7ca"
+  val invalidCalculationIdLocalTesting: String = "640490b4-06e3-4fef-a555-6fd0877dc7ca"
 
   def getTaxYear: String = Seq(LocalDateTime.now.getYear.toString, LocalDateTime.now.plusYears(1).getYear.toString.takeRight(2)).mkString("-")
 
@@ -311,7 +311,7 @@ trait BasePage extends Matchers with ScalaDsl with Environments with BaseStepDef
                                  govTestScenario: Option[String] = None): HttpResponse[String] = {
     val headers = authTokenGeneratorLocalTesting(commonHeaders, govTestScenario)
 
-    val postUrl                                    = s"http://localhost:8342/reports/$validNinoForLocalTesting/111190b4-06e3-4fef-a555-6fd0877dc7ca"
+    val postUrl                                    = s"http://localhost:8342/reports/$validNinoForLocalTesting/$validCalculationIdForLocalTesting"
     val govTestScenarioHeader: Map[String, String] = govTestScenario.fold(Map.empty[String, String])(value => Map("Gov-Test-Scenario" -> value))
     request = Request("POST", postUrl, None, headers, Some(govTestScenarioHeader))
     response = getHttpWithTimeout(postUrl).postData("{}").headers(headers ++ govTestScenarioHeader).copy(proxyConfig = proxy).asString
@@ -354,7 +354,7 @@ trait BasePage extends Matchers with ScalaDsl with Environments with BaseStepDef
     request = Request("POST", postUrl, Some(postBody), commonHeaders, Some(govTestScenarioHeader))
     response = getHttpWithTimeout(postUrl).postData(postBody).headers(commonHeaders ++ govTestScenarioHeader).copy(proxyConfig = proxy).asString
     print("\n"+"The response at the auth token generator is : "+response )
-    assert(response.body contains(invalidNinoForLocalTesting+" is not a valid nino"))
+    assert(response.body contains(unformattedNinoForLocalTesting+" is not a valid nino"))
 
     if (printConfig) printRequestAndResponseLog()
     response
@@ -364,7 +364,33 @@ trait BasePage extends Matchers with ScalaDsl with Environments with BaseStepDef
                                  govTestScenario: Option[String] = None): HttpResponse[String] = {
     val headers = authTokenGeneratorLocalTesting(commonHeaders, govTestScenario)
 
-    val postUrl                                    = s"http://localhost:8342/reports/$invalidNinoForLocalTesting/111190b4-06e3-4fef-a555-6fd0877dc7ca"
+    val postUrl                                    = s"http://localhost:8342/reports/$invalidNinoForLocalTesting/$validCalculationIdForLocalTesting"
+    val govTestScenarioHeader: Map[String, String] = govTestScenario.fold(Map.empty[String, String])(value => Map("Gov-Test-Scenario" -> value))
+    request = Request("POST", postUrl, None, headers, Some(govTestScenarioHeader))
+    response = getHttpWithTimeout(postUrl).postData("{}").headers(headers ++ govTestScenarioHeader).copy(proxyConfig = proxy).asString
+    print("\n"+"The response at the generate report is : "+response )
+    if (printConfig) printRequestAndResponseLog()
+    response
+  }
+
+  def generateReportWithInvalidCalculationIdLocalTesting(commonHeaders: Map[String, String] = requestHeadersForPostNinoCall,
+                                                govTestScenario: Option[String] = None): HttpResponse[String] = {
+    val headers = authTokenGeneratorLocalTesting(commonHeaders, govTestScenario)
+
+    val postUrl                                    = s"http://localhost:8342/reports/$validNinoForLocalTesting/$invalidCalculationIdLocalTesting"
+    val govTestScenarioHeader: Map[String, String] = govTestScenario.fold(Map.empty[String, String])(value => Map("Gov-Test-Scenario" -> value))
+    request = Request("POST", postUrl, None, headers, Some(govTestScenarioHeader))
+    response = getHttpWithTimeout(postUrl).postData("{}").headers(headers ++ govTestScenarioHeader).copy(proxyConfig = proxy).asString
+    print("\n"+"The response at the generate report is : "+response )
+    if (printConfig) printRequestAndResponseLog()
+    response
+  }
+
+  def generateReportWithUnformattedNinoLocalTesting(commonHeaders: Map[String, String] = requestHeadersForPostNinoCall,
+                                                govTestScenario: Option[String] = None): HttpResponse[String] = {
+    val headers = authTokenGeneratorLocalTesting(commonHeaders, govTestScenario)
+
+    val postUrl                                    = s"http://localhost:8342/reports/$unformattedNinoForLocalTesting/$validCalculationIdForLocalTesting"
     val govTestScenarioHeader: Map[String, String] = govTestScenario.fold(Map.empty[String, String])(value => Map("Gov-Test-Scenario" -> value))
     request = Request("POST", postUrl, None, headers, Some(govTestScenarioHeader))
     response = getHttpWithTimeout(postUrl).postData("{}").headers(headers ++ govTestScenarioHeader).copy(proxyConfig = proxy).asString
@@ -423,6 +449,24 @@ trait BasePage extends Matchers with ScalaDsl with Environments with BaseStepDef
                        govTestScenario: Option[String] = None): HttpResponse[String] = {
 
     val postUrl                                    = URLs.retrieveRequestUrl(url)
+    val govTestScenarioHeader: Map[String, String] = govTestScenario.fold(Map.empty[String, String])(value => Map("Gov-Test-Scenario" -> value))
+
+    request = Request("POST", postUrl, None, commonHeaders, Some(govTestScenarioHeader))
+    response =
+      getHttpWithTimeout(postUrl).method("POST").headers(commonHeaders ++ govTestScenarioHeader).postData("").copy(proxyConfig = proxy).asString
+
+    if (printConfig) printRequestAndResponseLog()
+    printRequestAndResponseLog()
+
+    response
+  }
+
+  def requestEmptyPOSTWithCredentials(url: String,
+                                      commonHeaders: Map[String, String] = requestHeaders,
+                                      govTestScenario: Option[String] = None,
+                                      credentials: Credentials): HttpResponse[String] = {
+
+    val postUrl                                    = URLs.retrieveRequestUrlWithCredentials(url, credentials)
     val govTestScenarioHeader: Map[String, String] = govTestScenario.fold(Map.empty[String, String])(value => Map("Gov-Test-Scenario" -> value))
 
     request = Request("POST", postUrl, None, commonHeaders, Some(govTestScenarioHeader))

@@ -24,26 +24,6 @@ import uk.gov.hmrc.integration.cucumber.utils.data.TestData
 
 class GenerateTestUsersStepDef extends BaseStepDef with TestData {
 
-  Then("""^I generate tax payers for given environment$""") { () =>
-    env match {
-      case "local" =>
-        taxPayer = createLocalTestUser(AffinityGroup.Individual)
-        print(AffinityGroup.Individual)
-        taxPayer = createLocalTestUser(AffinityGroup.Organisation)
-        print(AffinityGroup.Organisation)
-        taxPayer = createLocalTestUser(AffinityGroup.Agent)
-        print(AffinityGroup.Agent)
-      case "externaltest" =>
-        taxPayer = createUserAuthorisedOnApiPlatform(AffinityGroup.Individual)
-        print(AffinityGroup.Individual)
-        taxPayer = createAgentUserAuthorisedOnApiPlatform
-        print(AffinityGroup.Agent)
-      case "development" =>
-        taxPayer = createUserAuthorisedOnApiPlatform(AffinityGroup.Individual)
-        print(AffinityGroup.Individual)
-    }
-  }
-
   Given("""^I make a POST call to nino to activate the services$""") { () =>
     postNinoLocalTesting()
   }
@@ -61,9 +41,19 @@ class GenerateTestUsersStepDef extends BaseStepDef with TestData {
     generateReportLocalTesting()
   }
 
+  Given("""^I make a POST call to generate report with unformatted nino$""") { () =>
+    authTokenGeneratorLocalTesting()
+    generateReportWithUnformattedNinoLocalTesting()
+  }
+
   Given("""^I make a POST call to generate report with invalid nino$""") { () =>
     authTokenGeneratorLocalTesting()
     generateReportWithInvalidNinoLocalTesting()
+  }
+
+  Given("""^I make a POST call to generate report with invalid calculationID nino$""") { () =>
+    authTokenGeneratorLocalTesting()
+    generateReportWithInvalidCalculationIdLocalTesting()
   }
 
   Given("""^I make a POST call to generate acknowledge report with valid nino$""") { () =>

@@ -67,7 +67,6 @@ object OAuth {
 
     confirmUrl(s"$oauthFrontendUrl/grantscope")
     findElementById("givePermission").click()
-    Thread.sleep(1000)
   }
 
   def grantAuthorityToVendorWithPassword(userId: String, password: String): Unit = {
@@ -92,7 +91,6 @@ object OAuth {
       println("\n\n⚠️ ⚠️ ⚠️  Agents not working: You cannot access client data at the moment  ⚠️ ⚠️ ⚠️\n\n")
     }
     findElementById("givePermission").click()
-    Thread.sleep(1.*(1000))
   }
 
 
@@ -121,7 +119,6 @@ object OAuth {
       println("\n\n⚠️ ⚠️ ⚠️  Agents not working: You cannot access client data at the moment  ⚠️ ⚠️ ⚠️\n\n")
     }
     findElementById("authorise").click()
-    Thread.sleep(1.*(1000))
   }
 
   def setupVendorAccessToken: String = {

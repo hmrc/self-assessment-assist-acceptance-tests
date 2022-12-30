@@ -60,6 +60,7 @@ object ResponseBodies {
       case "RULE_INCORRECT_GOV_TEST_SCENARIO"      => CommonErrorsJson.RULE_INCORRECT_GOV_TEST_SCENARIO
       case "ACCEPT_HEADER_INVALID"                 => CommonErrorsJson.ACCEPT_HEADER_INVALID
       case "FORMAT_NINO"                           => CommonErrorsJson.FORMAT_NINO
+      case "FORMAT_CALC_ID"                        => CommonErrorsJson.FORMAT_CALC_ID
       case "FORMAT_TAX_YEAR"                       => CommonErrorsJson.FORMAT_TAX_YEAR
       case "INVALID_CORRELATIONID"                 => CommonErrorsJson.INVALID_CORRELATIONID
       case "RULE_SUBMISSION_FAILED"                => CommonErrorsJson.RULE_SUBMISSION_FAILED

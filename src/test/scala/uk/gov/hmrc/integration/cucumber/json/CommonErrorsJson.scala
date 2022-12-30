@@ -24,7 +24,7 @@ object CommonErrorsJson {
     """
       |{
       | "code" : "CLIENT_OR_AGENT_NOT_AUTHORISED",
-      | "message" : "The client and/or agent is not authorised"
+      | "message" : "The client and/or agent is not authorised."
       |}
     """.stripMargin
 
@@ -127,8 +127,8 @@ object CommonErrorsJson {
   val MATCHING_RESOURCE_NOT_FOUND: String =
     """
       |{
-      | "code": "MATCHING_RESOURCE_NOT_FOUND",
-      | "message": "Matching resource not found"
+      |    "code": "MATCHING_RESOURCE_NOT_FOUND",
+      |    "message": "The Calculation ID was not found at this time, try again later"
       |}
     """.stripMargin
 
@@ -210,6 +210,14 @@ object CommonErrorsJson {
       |{
       | "code" : "FORMAT_NINO",
       | "message" : "The provided NINO is invalid"
+      |}
+    """.stripMargin
+
+  val FORMAT_CALC_ID: String =
+    """
+      |{
+      |  "code" : "FORMAT_CALC_ID",
+      |  "message" : "The provided Calculation ID is invalid"
       |}
     """.stripMargin
 

@@ -26,73 +26,29 @@ import scala.util.Try
 
 class CommonStepDef extends BaseStepDef with JsonTools {
 
-  When("""^generate report POSt call url: (.*), invoked with valid nino with request body: (.*)$""") {
-    (url: String, scenario:String) =>
-
-      if (scenario != "None")response = requestEmptyPOST(url, requestHeaders,Some(scenario))
-      else response = requestEmptyPOST(url, requestHeaders, None)
-  }
-
-  When("""^I generate report POST call url: (.*), invoked with valid nino with request body: (.*)$""") {
-    (url: String, scenario:String) =>
-
-      if (scenario != "None")response = requestEmptyPOST(url, requestHeaders,Some(scenario))
-      else response = requestEmptyPOST(url, requestHeaders, None)
-  }
-
-  When("""^generate report POSt call url: (.*), invoked with invalid nino with request body: (.*)$""") {
+  When("""^I make a POST call to (.*) url to generate report with invalid nino and request body (.*)$""") {
     (url: String, scenario:String) =>
       if (scenario != "None") response = requestEmptyPOST(url, requestHeaders, Some(scenario))
       else response = requestEmptyPOST(url, requestHeaders, None)
   }
 
-  When("""^acknowledge report POSt call url: (.*), invoked with valid nino with request body: (.*)$""") {
+  When("""^I make a POST call to (.*) url with invalid calculationID and request body (.*)$""") {
     (url: String, scenario: String) =>
 
       if (scenario != "None") response = requestEmptyPOST(url, requestHeaders, Some(scenario))
       else response = requestEmptyPOST(url, requestHeaders, None)
   }
 
-  When("""^generate report POSt call url: (.*), invoked with invalid calculationID with request body: (.*)$""") {
+  When("""^I make a POST call to (.*) url with invalid reportID and request body (.*)$""") {
     (url: String, scenario: String) =>
 
       if (scenario != "None") response = requestEmptyPOST(url, requestHeaders, Some(scenario))
       else response = requestEmptyPOST(url, requestHeaders, None)
   }
-
-
-  When("""^a request is made to GET to url: (.*), invoked with invalid nino with request body: (.*)$""") { (url: String, scenario: String) =>
-    if (scenario != "None") response = requestGET(url, requestHeaders, Some(scenario))
-    else response = requestGET(url, requestHeaders, None)
-  }
-
-  When("""^acknowledge report POSt call url: (.*), invoked with invalid reportID with request body: (.*)$""") {
-    (url: String, scenario: String) =>
-
-      if (scenario != "None") response = requestEmptyPOST(url, requestHeaders, Some(scenario))
-      else response = requestEmptyPOST(url, requestHeaders, None)
-  }
-
-
-//
-//      When("""^a request is made to POST to url: (.*), with the JSON body: (.*), and the gov-test-scenario: (.*)$"""){
-//        (url: String, jsonBody: String, scenario: String) =>
-//
-//          if (scenario != "None") response = requestPOST(url, jsonBody, requestHeaders, Some(scenario))
-//          else response = requestPOST(url, jsonBody, requestHeaders, None)
-//      }
-
-
-
-
-
-
-
 
   Then("""^close the browser$""") { () =>
     Try(SingletonDriver.closeInstance)
   }
-
 
   Then("""^I set the API version to (.*)$""") { version: String =>
     apiVersion = version

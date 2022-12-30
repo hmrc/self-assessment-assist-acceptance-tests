@@ -37,12 +37,12 @@ class AuthStepDef extends BaseStepDef {
   // Authorised
   Given("""^an individual is authorised$""") { () =>
     taxPayer = createLocalTestUser(AffinityGroup.Individual)
-    printTaxPayer()
+    printGeneratedTaxPayer(AffinityGroup.Individual)
   }
 
   Given("""^an agent is authorised$""") { () =>
     taxPayer = createLocalTestUser(AffinityGroup.Agent)
-    printTaxPayer()
+    printGeneratedTaxPayer(AffinityGroup.Individual)
   }
 
   // Invalid nino
@@ -98,6 +98,11 @@ class AuthStepDef extends BaseStepDef {
 
   Given ("""^I login through the Auth login page using nino (.*)$"""){ (nino: String) =>
     taxPayer = createLocalAgentNotAuthorisedForClient
+  }
+
+  def printGeneratedTaxPayer(affinityGroup: String): Unit = {
+    val client: String = if(affinityGroup == AffinityGroup.Agent) "client " else ""
+    println(s"\n░░░▒▒▒▓▓▓▓ Self Assessment Assist ▓▓▓▒▒▒░░░\naffinity group: $affinityGroup\n${client}identifier: ${taxPayer.nino}\naccess token: ${taxPayer.accessToken}\n")
   }
 
 }
