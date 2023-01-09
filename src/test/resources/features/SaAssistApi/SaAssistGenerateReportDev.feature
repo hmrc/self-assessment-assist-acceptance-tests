@@ -38,5 +38,3 @@ Feature: Dev - Self assessment assist generate report and acknowledge report API
     When I make a POST call to SaAssistAcknowledgeInvalidReportID url with invalid reportID and request body None
     Then the response code is 400
     And the response body is FORMAT_REPORT_ID
-
-    #401 & 403 needs to be added to the dev env
