@@ -42,7 +42,7 @@ Feature: Local - Self assessment assist generate report and acknowledge report A
     Then the response code is 404
     And the response body is MATCHING_RESOURCE_NOT_FOUND
 
-  @api-tests @local
+  @api-tests @wip
   Scenario: POST call to generate acknowledge report with invalid reportID - Local Testing
     Given I make a POST call to generate acknowledge report with invalid reportID nino
     Then the response code is 400

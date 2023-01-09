@@ -25,12 +25,12 @@ class SaAssistGenerateReport extends BaseStepDef with TestData {
         printGeneratedTaxPayer(AffinityGroup.Individual)
         taxPayer = createAgentUserAuthorisedOnApiPlatform
         printGeneratedTaxPayer(AffinityGroup.Agent)
+        taxPayer = createUserAuthorisedOnApiPlatform(AffinityGroup.Organisation)
+        print(AffinityGroup.Organisation)
       case "development" =>
         taxPayer = createUserAuthorisedOnApiPlatform(AffinityGroup.Individual)
         printGeneratedTaxPayer(AffinityGroup.Individual)
-        taxPayer = createUserAuthorisedOnApiPlatform(AffinityGroup.Individual)
-        printGeneratedTaxPayer(AffinityGroup.Agent)
-        taxPayer = createUserAuthorisedOnApiPlatform(AffinityGroup.Individual)
+        taxPayer = createUserAuthorisedOnApiPlatform(AffinityGroup.Organisation)
         printGeneratedTaxPayer(AffinityGroup.Organisation)
     }
   }
